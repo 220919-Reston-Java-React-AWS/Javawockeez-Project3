@@ -1,7 +1,10 @@
 # Build
 
 FROM maven:3.8.6-jdk-11
-WORKDIR "/social-media-spring-main"
+# WORKDIR "/social-media-spring-main"
+RUN echo "$PWD"
+
+
 RUN mvn build
 
 
