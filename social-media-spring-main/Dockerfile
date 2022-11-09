@@ -1,7 +1,7 @@
 # Build
 
 FROM maven:3.8.6-jdk-11
-CMD cd social-media-spring-main
+WORKDIR "/social-media-spring-main"
 RUN mvn build
 
 
