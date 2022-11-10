@@ -2,14 +2,18 @@
 
 FROM maven:3.8.6-jdk-11
 WORKDIR "/social-media-spring-main"
-# RUN echo "$PWD"
-RUN mvn install
+RUN echo "$PWD"
+RUN ls -l
+RUN mvn build
+
 
 
 # Package and Run
 
 FROM openjdk:11
+
 COPY "./target/social-media-0.0.1-SNAPSHOT.jar" app.jar
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
 
