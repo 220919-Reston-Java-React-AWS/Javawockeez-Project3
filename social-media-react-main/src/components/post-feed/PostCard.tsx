@@ -25,6 +25,8 @@ import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
+import "./PostCard.css"
+
 interface postProps {
     post: Post,
     key: number
@@ -62,6 +64,10 @@ export const PostCard = (props: postProps) => {
     await apiUpsertPost(payload);
   }
 
+  const onClickEdit = (event: React.MouseEvent) => {
+    alert(event.currentTarget.id)
+  }
+
   commentForm = 
   <Paper
       component="form"
@@ -81,6 +87,7 @@ export const PostCard = (props: postProps) => {
       </IconButton>
  </Paper>
 
+
   if (props.post.imageUrl) {
     media = <CardMedia
     component="img"
@@ -89,6 +96,7 @@ export const PostCard = (props: postProps) => {
     sx={{maxHeight: "300px", width: "auto", marginLeft: "auto", marginRight: "auto" }}
   />
   }
+
 
   return (
     <Card sx={{maxWidth:"100%", marginTop: "3%" }}>
@@ -100,14 +108,18 @@ export const PostCard = (props: postProps) => {
             <PersonIcon/>
           </Avatar>
         }
-        />
-       
+        /> 
       { media }
       <CardContent>
         <Typography variant="body2" color="text.secondary">
           {props.post.text}
         </Typography>
       </CardContent>
+
+      <div className="card-footer">
+
+        <a onClick={onClickEdit} id={`${props.post.id}`}>Edit post</a>
+
       <CardActions disableSpacing>
           <ExpandMore
           expand={expanded}
@@ -132,6 +144,7 @@ export const PostCard = (props: postProps) => {
             </Grid>
         </CardContent>
       </Collapse>
+      </div>
     </Card>
       );
 }
