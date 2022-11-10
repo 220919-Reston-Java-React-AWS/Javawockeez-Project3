@@ -52,4 +52,9 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(created));
     }
+
+    @GetMapping("/hello")
+    public String hello(){
+        return "Hello World";
+    }
 }
