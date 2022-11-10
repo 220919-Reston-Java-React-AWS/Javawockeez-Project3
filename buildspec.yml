@@ -6,5 +6,5 @@ phases:
       - mvn clean package
 artifacts:
   files:
-    - Dockerfile
-    - target\social-media-0.0.1-SNAPSHOT.jar
+    - social-media-spring-main/Dockerfile
+    - social-media-spring-main/target/social-media-0.0.1-SNAPSHOT.jar
