@@ -4,7 +4,7 @@
 
 
 FROM maven:3.8.6-jdk-11
-WORKDIR "/social-media-spring-main"
+WORKDIR "social-media-spring-main"
 RUN mvn clean package
 
 
@@ -15,6 +15,7 @@ RUN mvn clean package
 FROM openjdk:11
 COPY "./target/social-media-0.0.1-SNAPSHOT.jar" app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
 
 
 # To build: docker build --progress=plain --no-cache .
