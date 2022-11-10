@@ -1,6 +1,7 @@
 version: 0.2
 phases: 
   build:
+    # made from jenkins
     commands:
       - cd social-media-spring-main
       - mvn clean package
@@ -8,4 +9,6 @@ artifacts:
   files:
     - social-media-spring-main/Dockerfile
     - social-media-spring-main/target/social-media-0.0.1-SNAPSHOT.jar
+  # fj
   discard-paths: yes
+  
