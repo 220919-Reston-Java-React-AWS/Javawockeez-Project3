@@ -1,5 +1,6 @@
 // package com.revature.serviceTests;
 
+// import com.revature.exceptions.InvalidInputException;
 // import com.revature.models.User;
 // import com.revature.services.AuthService;
 // import com.revature.services.UserService;
@@ -25,10 +26,14 @@
 
 //     @Test
 //     public void register_INPUT_User_Expect_SameUser(){
-//         User tmpUser = new User();
-//         when(userService.save(tmpUser)).thenReturn(tmpUser);
+//         try {
+//             User tmpUser = new User();
+//             when(userService.save(tmpUser)).thenReturn(tmpUser);
 
-//         Assertions.assertEquals(tmpUser, as.register(tmpUser));
+//             Assertions.assertEquals(tmpUser, as.register(tmpUser));
+//         } catch (InvalidInputException e){
+//             System.out.println(e.getMessage());
+//         }
 //     }
 
 //     @Test
