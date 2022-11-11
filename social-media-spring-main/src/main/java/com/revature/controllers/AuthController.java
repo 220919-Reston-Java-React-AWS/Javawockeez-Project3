@@ -2,6 +2,9 @@ package com.revature.controllers;
 
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.RegisterRequest;
+import com.revature.dtos.Response;
+import com.revature.exceptions.ExceptionLogger;
+import com.revature.exceptions.InvalidInputException;
 import com.revature.models.User;
 import com.revature.services.AuthService;
 import org.springframework.http.HttpStatus;
@@ -50,7 +53,12 @@ public class AuthController {
                 registerRequest.getFirstName(),
                 registerRequest.getLastName());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(created));
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(created));
+        } catch (InvalidInputException e){
+            ExceptionLogger.log(e, "red");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new User() );
+        }
     }
 
     @GetMapping("/hello")
