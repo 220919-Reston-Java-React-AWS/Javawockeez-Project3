@@ -2,17 +2,14 @@ server:
   port: 8080
 spring:
   jpa:
-    database: POSTGRESQL
-    show-sql: true
     hibernate:
-      ddl-auto: update
-    # database-platform: org.hibernate.dialect.PostgreSQL
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
   datasource:
-    platform: postgres
     url: jdbc:postgresql://genesis-revature.cyh5jpqvxggt.us-west-2.rds.amazonaws.com:5432/postgres
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: username
-  # h2:
-  #   console.enabled: true
+  h2:
+    console.enabled: true
