@@ -9,6 +9,5 @@ artifacts:
   files:
     - social-media-spring-main/Dockerfile
     - social-media-spring-main/target/social-media-0.0.1-SNAPSHOT.jar
-  # since we have to cd into the maven folder
   discard-paths: yes
   
