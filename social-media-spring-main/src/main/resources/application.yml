@@ -3,13 +3,14 @@ server:
 spring:
   jpa:
     hibernate:
-      ddl-auto: update
-      database-platform: org.hibernate.dialect.H2Dialect
-      defer-datasource-initialization: true
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
   datasource:
-    url: ${db-url}
+    url: jdbc:postgresql://spring-database.crx27ufqdeaf.us-west-2.rds.amazonaws.com:5432/postgres
     driver-class-name: org.postgresql.Driver
-    username: ${db-user}
-    password: ${db-pwd}
+    username: postgres
+    password: password
   h2:
     console.enabled: true
+    
