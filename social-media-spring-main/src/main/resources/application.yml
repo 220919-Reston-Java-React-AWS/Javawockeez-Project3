@@ -13,3 +13,4 @@ spring:
     password: username
   h2:
     console.enabled: true
+    
