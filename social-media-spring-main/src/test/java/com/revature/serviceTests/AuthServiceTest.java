@@ -36,20 +36,20 @@ public class AuthServiceTest {
         }
     }
 
-    @Test
-    public void findByCredentials_INPUT_validCredentials_EXPECT_userOptional(){
-        User tmpUser = new User(1, "test@test.com", "password", "Testy", "McTestface");
-        when(userService.findByCredentials(tmpUser.getEmail(), tmpUser.getPassword())).thenReturn( Optional.of( tmpUser ) );
+    // @Test
+    // public void findByCredentials_INPUT_validCredentials_EXPECT_userOptional(){
+    //     User tmpUser = new User(1, "test@test.com", "password", "Testy", "McTestface");
+    //     when(userService.findByCredentials(tmpUser.getEmail(), tmpUser.getPassword())).thenReturn( Optional.of( tmpUser ) );
 
-        Assertions.assertEquals(Optional.of( tmpUser ), as.findByCredentials(tmpUser.getEmail(), tmpUser.getPassword()));
-    }
+    //     Assertions.assertEquals(Optional.of( tmpUser ), as.findByCredentials(tmpUser.getEmail(), tmpUser.getPassword()));
+    // }
 
-    @Test
-    public void findByCredentials_INPUT_invalidCredentials_EXPECT_emptyOptional(){
-        User tmpUser = new User(1, "test@test.com", "password", "Testy", "McTestface");
-        when(userService.findByCredentials("est@test.com", tmpUser.getPassword())).thenReturn( Optional.empty( ) );
+    // @Test
+    // public void findByCredentials_INPUT_invalidCredentials_EXPECT_emptyOptional(){
+    //     User tmpUser = new User(1, "test@test.com", "password", "Testy", "McTestface");
+    //     when(userService.findByCredentials("est@test.com", tmpUser.getPassword())).thenReturn( Optional.empty( ) );
 
-        Assertions.assertEquals(Optional.empty( ), as.findByCredentials(tmpUser.getEmail(), tmpUser.getPassword()));
-    }
+    //     Assertions.assertEquals(Optional.empty( ), as.findByCredentials(tmpUser.getEmail(), tmpUser.getPassword()));
+    // }
 
 }
