@@ -13,4 +13,3 @@ spring:
     password: ${db-pwd}
   h2:
     console.enabled: true
-    
