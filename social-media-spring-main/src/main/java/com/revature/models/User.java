@@ -19,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String email;
-    // @JsonIgnore
+    @JsonIgnore
     private String password;
     private String firstName;
     private String lastName;

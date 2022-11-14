@@ -29,6 +29,6 @@ public class Post {
 	private String imageUrl;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Post> comments;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.DETACH)
 	private User author;
 }
