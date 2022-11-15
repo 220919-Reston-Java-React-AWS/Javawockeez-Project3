@@ -20,19 +20,25 @@ public class PostController {
         this.postService = postService;
     }
     
-    @Authorized
+    @Authorized // was causing problems
+    @GetMapping("/all")
+    public ResponseEntity<List<Post>> getAll() {
+        return ResponseEntity.ok(this.postService.getAll());
+    }
+
+    @Authorized // was causing problems
     @GetMapping
-    public ResponseEntity<List<Post>> getAllPosts() {
-    	return ResponseEntity.ok(this.postService.getAll());
+    public ResponseEntity<List<Post>> getParents() {
+        return ResponseEntity.ok(this.postService.getParents());
     }
     
-    @Authorized
+    @Authorized // was causing problems
     @PutMapping
     public ResponseEntity<Post> upsertPost(@RequestBody Post post) {
     	return ResponseEntity.ok(this.postService.upsert(post));
     }
 
-    @Authorized
+    @Authorized // was causing problems
     @DeleteMapping
     public ResponseEntity removePost(@RequestBody Post post) {
         this.postService.remove(post);

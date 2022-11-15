@@ -1,5 +1,14 @@
 package com.revature.exceptions;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.util.WebUtils;
+
+@ControllerAdvice
 public class ExceptionLogger {
 
     public static final String ANSI_RESET = "\u001B[0m";
@@ -44,14 +53,54 @@ public class ExceptionLogger {
 
         // Print the stack-trace
         System.out.println("\nStack Trace: ");
-        for (StackTraceElement elem : e.getStackTrace() ){
-            System.out.println( "\t" + elem.toString() );
+        int len = e.getStackTrace().length;
+        if (len < 10) {
+            for (StackTraceElement elem : e.getStackTrace()) {
+                System.out.println("\t" + elem.toString());
+            }
+        } else {
+            for (int i=0; i<5; i++) {
+                System.out.println("\t" + e.getStackTrace()[i].toString());
+            }
+            System.out.println("\t...\n\n\t...");
+            for (int i=len-5; i<len; i++) {
+                System.out.println("\t" + e.getStackTrace()[i].toString());
+            }
         }
 
         //Reset the text/background to terminal default
         System.out.println("\n" + ANSI_RESET);
     }
 
+
+    @ExceptionHandler//({InvalidInputException.class, NotLoggedInException.class})
+    public final ResponseEntity<Exception> handleExceptions(Exception e, WebRequest request){
+        HttpHeaders headers = new HttpHeaders();
+        HttpStatus status;
+
+        if (e instanceof InvalidInputException){
+            status = HttpStatus.BAD_REQUEST;
+            this.log(e, "green");
+
+        } else if (e instanceof NotLoggedInException){
+            status = HttpStatus.UNAUTHORIZED;
+            this.log(e, "green");
+
+        } else {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            this.log(e, "red", "black");
+
+        }
+        return handleExceptionInternal(e, headers, status, request);
+    }
+
+    protected ResponseEntity<Exception> handleExceptionInternal(Exception ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
+            request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);
+        }
+
+        return new ResponseEntity<Exception>(ex, headers, status);
+    }
 
     private static String name2ansiText(String color){
         switch ( color.toLowerCase() ) {
