@@ -22,6 +22,7 @@ public class UserService {
     }
 
     public Optional<User> findByCredentials(int id) {
+//        System.out.println(userRepository.findById(id));
         return userRepository.findById(id);
     }
 

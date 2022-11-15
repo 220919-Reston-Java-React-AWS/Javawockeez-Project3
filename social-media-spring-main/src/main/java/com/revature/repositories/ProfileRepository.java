@@ -1,14 +1,13 @@
 package com.revature.repositories;
 
+import com.revature.models.Profile;
 import com.revature.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.revature.models.Post;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PostRepository extends JpaRepository<Post, Integer>{
+public interface ProfileRepository extends JpaRepository<Profile, Integer>{
 
-    List<Post> findAllByAuthor(User author);
+    Optional<Profile> findByUser(User user);
 }

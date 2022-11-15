@@ -2,6 +2,7 @@ package com.revature.services;
 
 import java.util.List;
 
+import com.revature.models.User;
 import org.springframework.stereotype.Service;
 
 import com.revature.models.Post;
@@ -18,6 +19,11 @@ public class PostService {
 
 	public List<Post> getAll() {
 		return this.postRepository.findAll();
+	}
+
+	// added for all user profile posts by id
+	public List<Post> getAllByAuthor(User id) {
+		return this.postRepository.findAllByAuthor(id);
 	}
 
 	public Post upsert(Post post) {
