@@ -46,19 +46,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<User> register(@RequestBody RegisterRequest registerRequest) throws InvalidInputException {
         User created = new User(0,
                 registerRequest.getEmail(),
                 registerRequest.getPassword(),
                 registerRequest.getFirstName(),
                 registerRequest.getLastName());
 
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(created));
-        } catch (InvalidInputException e){
-            ExceptionLogger.log(e, "red");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new User() );
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(created));
     }
 
     @GetMapping("/hello")

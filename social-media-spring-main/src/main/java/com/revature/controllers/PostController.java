@@ -21,9 +21,15 @@ public class PostController {
     }
     
     @Authorized // was causing problems
+    @GetMapping("/all")
+    public ResponseEntity<List<Post>> getAll() {
+        return ResponseEntity.ok(this.postService.getAll());
+    }
+
+    @Authorized // was causing problems
     @GetMapping
-    public ResponseEntity<List<Post>> getAllPosts() {
-    	return ResponseEntity.ok(this.postService.getAll());
+    public ResponseEntity<List<Post>> getParents() {
+        return ResponseEntity.ok(this.postService.getParents());
     }
     
     @Authorized // was causing problems
