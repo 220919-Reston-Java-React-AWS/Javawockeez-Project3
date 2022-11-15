@@ -21,6 +21,10 @@ public class UserService {
         return userRepository.findByEmailAndPassword(email, password);
     }
 
+    public Optional<User> findByCredentials(int id) {
+        return userRepository.findById(id);
+    }
+
     public User save(User user) throws InvalidInputException {
 
         if ( !validFirstname(user.getFirstName()) ) {
