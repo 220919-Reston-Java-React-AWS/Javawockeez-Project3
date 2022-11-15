@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.revature.models.Post;
 import com.revature.repositories.PostRepository;
 
+import javax.transaction.Transactional;
+
 @Service
 public class PostService {
 
@@ -24,7 +26,13 @@ public class PostService {
 		return this.postRepository.save(post);
 	}
 
+	@Transactional
 	public void remove(Post post){
+
+		for (Post comment: post.getComments()){
+			remove(comment);
+		}
+
 		this.postRepository.delete(post);
 	}
 }

@@ -27,8 +27,8 @@ public class Post {
     private int id;
 	private String text;
 	private String imageUrl;
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<Post> comments;
-	@ManyToOne(cascade = CascadeType.DETACH)
+	@ManyToOne
 	private User author;
 }
