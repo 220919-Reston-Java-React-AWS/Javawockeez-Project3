@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import com.revature.exceptions.InvalidInputException;
 import com.revature.models.User;
 import org.springframework.stereotype.Service;
 
@@ -31,25 +32,65 @@ public class PostService {
 	}
 
 	public List<Post> getParents() {
-		return removeChildren( this.postRepository.findAll() );
+		return ignoreChildren( this.postRepository.findAll() );
 	}
 
 	public Post upsert(Post post) {
 		return this.postRepository.save(post);
 	}
 
+	public Post findParent(Post post) throws InvalidInputException {
+		List<Post> allPosts = getAll();
+
+		for (Post testPost : allPosts){
+//			if (testPost.getComments().contains(post)){
+//				return testPost;
+//			}
+			for (Post comment : testPost.getComments()){
+				if (comment.getId() == post.getId()){
+					return testPost;
+				}
+			}
+		}
+
+		throw new InvalidInputException();
+	}
+
 	@Transactional
 	public void remove(Post post){
 
-		for (Post comment: post.getComments()){
-			remove(comment);
-		}
+//		List<Post> comments = post.getComments();
+//
+//		for (Post comment: comments){
+//			remove(comment);
+//			comments.remove(comment);
+//		}
+//
+//		post.setComments(comments);
+		try {
+			Post parent = findParent(post);
+			System.out.println("Before " + parent);
+			parent.getComments().remove(post);
+//			for (Post comment : parent.getComments()){
+//				if (comment.getId() == post.getId()){
+//					parent.getComments().remove(comment);
+//				}
+//			}
+			System.out.println("After " + parent);
+			upsert(parent);
+		} catch (InvalidInputException e) {}
 
+		System.out.println(post);
 		this.postRepository.delete(post);
 	}
 
+	public void separateFromParent(Post post){
+		List<Post> allPosts = getAll();
 
-	private List<Post> removeChildren(List<Post> allPosts){
+	}
+
+
+	private List<Post> ignoreChildren(List<Post> allPosts){
 
 		// Must be done first since we can't know if post has parents or grandchildren yet
 		HashSet<Integer> commentIds = new HashSet<Integer>();

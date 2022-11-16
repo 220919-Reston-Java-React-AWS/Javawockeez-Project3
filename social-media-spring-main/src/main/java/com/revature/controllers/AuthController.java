@@ -46,7 +46,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterRequest registerRequest) throws InvalidInputException {
+    public ResponseEntity<User> register(@RequestBody RegisterRequest registerRequest) throws InvalidInputException
+    {
         User created = new User(0,
                 registerRequest.getEmail(),
                 registerRequest.getPassword(),

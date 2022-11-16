@@ -11,6 +11,7 @@ import org.springframework.web.util.WebUtils;
 @ControllerAdvice
 public class ExceptionLogger {
 
+    // Ansi values to color the text/background of the terminal output
     public static final String ANSI_RESET = "\u001B[0m";
 
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -31,7 +32,9 @@ public class ExceptionLogger {
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
+    // ---------------------------------------------------------------------------------------------------------------//
 
+    // Main feature of this class. This formats and prints the exception in the console window
     public static void log(Exception e){
         log(e, "default", "default");
     }
@@ -54,16 +57,20 @@ public class ExceptionLogger {
         // Print the stack-trace
         System.out.println("\nStack Trace: ");
         int len = e.getStackTrace().length;
-        if (len < 10) {
+        if (len < 13) { // 13 = 2*_5_ + 3
+
             for (StackTraceElement elem : e.getStackTrace()) {
                 System.out.println("\t" + elem.toString());
             }
+
         } else {
-            for (int i=0; i<5; i++) {
+            for (int i=0; i<5; i++) { // First five
                 System.out.println("\t" + e.getStackTrace()[i].toString());
             }
+
             System.out.println("\t...\n\n\t...");
-            for (int i=len-5; i<len; i++) {
+
+            for (int i=len-5; i<len; i++) { // Last five
                 System.out.println("\t" + e.getStackTrace()[i].toString());
             }
         }
@@ -72,12 +79,20 @@ public class ExceptionLogger {
         System.out.println("\n" + ANSI_RESET);
     }
 
+    // ---------------------------------------------------------------------------------------------------------------//
 
-    @ExceptionHandler//({InvalidInputException.class, NotLoggedInException.class})
+    // Handles the cross-cutting concern of the Spring application (exception handling)
+    // If we get a 'good' error (i.e. flagging user errors like providing the wrong password on login) the exception is
+    // printed in green.
+    // If we get a 'bad' error (i.e. unexpected problems like SQL errors during normal operation) the exception is
+    // logged in red with a black background.
+    @ExceptionHandler
     public final ResponseEntity<Exception> handleExceptions(Exception e, WebRequest request){
+        // To pass on later
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status;
 
+        // Individualized handling
         if (e instanceof InvalidInputException){
             status = HttpStatus.BAD_REQUEST;
             this.log(e, "green");
@@ -90,18 +105,30 @@ public class ExceptionLogger {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             this.log(e, "red", "black");
 
-        }
-        return handleExceptionInternal(e, headers, status, request);
-    }
+            request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, e, WebRequest.SCOPE_REQUEST);
 
-    protected ResponseEntity<Exception> handleExceptionInternal(Exception ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
-            request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);
         }
 
-        return new ResponseEntity<Exception>(ex, headers, status);
+        // Create and return the response to send to the front-end
+        return new ResponseEntity<Exception>(e, headers, status);
+
+//        // Universal handling
+//        return handleExceptionInternal(e, headers, status, request);
     }
 
+//    protected ResponseEntity<Exception> handleExceptionInternal(Exception ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+//        if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
+//            request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);
+//        }
+//
+//        return new ResponseEntity<Exception>(ex, headers, status);
+//    }
+
+    // ---------------------------------------------------------------------------------------------------------------//
+
+    // Return the correct ansi string given the color name. Unrecognized values return an empty string (nothing)
+
+    // Text
     private static String name2ansiText(String color){
         switch ( color.toLowerCase() ) {
             case "black":
@@ -125,6 +152,7 @@ public class ExceptionLogger {
         }
     }
 
+    // Background
     private static String name2ansiBackground(String color){
         switch ( color.toLowerCase() ) {
             case "black":
