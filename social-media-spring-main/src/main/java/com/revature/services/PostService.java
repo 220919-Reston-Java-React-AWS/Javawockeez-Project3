@@ -2,10 +2,12 @@ package com.revature.services;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.revature.exceptions.InvalidInputException;
 import com.revature.models.User;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import com.revature.models.Post;
@@ -43,14 +45,14 @@ public class PostService {
 		List<Post> allPosts = getAll();
 
 		for (Post testPost : allPosts){
-//			if (testPost.getComments().contains(post)){
-//				return testPost;
-//			}
-			for (Post comment : testPost.getComments()){
-				if (comment.getId() == post.getId()){
-					return testPost;
-				}
+			if (testPost.getComments().contains(post)){
+				return testPost;
 			}
+//			for (Post comment : testPost.getComments()){
+//				if (comment.getId() == post.getId()){
+//					return testPost;
+//				}
+//			}
 		}
 
 		throw new InvalidInputException();
@@ -59,38 +61,18 @@ public class PostService {
 	@Transactional
 	public void remove(Post post){
 
-//		List<Post> comments = post.getComments();
-//
-//		for (Post comment: comments){
-//			remove(comment);
-//			comments.remove(comment);
-//		}
-//
-//		post.setComments(comments);
+		// Remove the post from the parent (otherwise you get a foreign-key error)
 		try {
 			Post parent = findParent(post);
-			System.out.println("Before " + parent);
 			parent.getComments().remove(post);
-//			for (Post comment : parent.getComments()){
-//				if (comment.getId() == post.getId()){
-//					parent.getComments().remove(comment);
-//				}
-//			}
-			System.out.println("After " + parent);
 			upsert(parent);
-		} catch (InvalidInputException e) {}
 
-		System.out.println(post);
+		} catch (InvalidInputException e) {} // Happens if there is no parent. Regardless, proceed as normal.
+
 		this.postRepository.delete(post);
 	}
 
-	public void separateFromParent(Post post){
-		List<Post> allPosts = getAll();
-
-	}
-
-
-	private List<Post> ignoreChildren(List<Post> allPosts){
+	private @NotNull List<Post> ignoreChildren(@NotNull List<Post> allPosts){
 
 		// Must be done first since we can't know if post has parents or grandchildren yet
 		HashSet<Integer> commentIds = new HashSet<Integer>();
