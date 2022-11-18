@@ -39,9 +39,6 @@ public class ProfileController {
     // get user information with id
     @GetMapping("/user/{id}")
     public ResponseEntity<User> getUserProfileName(@PathVariable int id){
-//        return ResponseEntity.ok(this.profileService.findByCredentials(id));
-
-
         Optional<User> optional = this.profileService.findByCredentials(id);
 
         if(!optional.isPresent()) {
@@ -65,5 +62,11 @@ public class ProfileController {
         }
 
         return ResponseEntity.ok(optional.get());
+    }
+
+    // Update user profile
+    @PatchMapping("/update-profile")
+    public ResponseEntity patchProfileData(@RequestBody Profile update){
+        return ResponseEntity.ok(this.profileService.patchProfileData(update));
     }
 }

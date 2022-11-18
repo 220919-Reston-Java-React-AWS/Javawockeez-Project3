@@ -21,9 +21,14 @@ public class UserService {
         return userRepository.findByEmailAndPassword(email, password);
     }
 
+    // find User in database using id
     public Optional<User> findByCredentials(int id) {
-//        System.out.println(userRepository.findById(id));
         return userRepository.findById(id);
+    }
+
+    // update User's account information
+    public User patchAccountData(User update){
+        return this.userRepository.saveAndFlush(update);
     }
 
     public User save(User user) throws InvalidInputException {

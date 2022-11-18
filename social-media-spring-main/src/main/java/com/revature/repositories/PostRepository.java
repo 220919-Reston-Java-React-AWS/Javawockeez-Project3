@@ -10,5 +10,6 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Integer>{
 
+    // Find all posts by a user
     List<Post> findAllByAuthor(User author);
 }

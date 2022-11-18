@@ -39,4 +39,9 @@ public class ProfileService {
     public Optional<Profile> findByUser(User user){
         return profileRepository.findByUser(user);
     }
+
+    // update the profile banner image
+    public Profile patchProfileData(Profile update) {
+        return this.profileRepository.saveAndFlush(update);
+    }
 }
