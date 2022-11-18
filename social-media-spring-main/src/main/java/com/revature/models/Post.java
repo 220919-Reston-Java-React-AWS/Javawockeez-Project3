@@ -22,6 +22,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
     private int id;
+	//@Lob
 	private String text;
 	private String imageUrl;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
