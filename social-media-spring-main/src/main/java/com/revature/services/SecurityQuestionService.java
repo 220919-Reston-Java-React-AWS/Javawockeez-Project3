@@ -23,10 +23,10 @@ public class SecurityQuestionService {
         this.securityQuestionRepository = securityQuestionRepository;
     }
 
-    public SecurityQuestion findbySecurityQuestion(SecurityQuestion check){
+    /*public SecurityQuestion findbySecurityQuestion(SecurityQuestion check){
         System.out.println("made it to service");
         return securityQuestionRepository.findBySecurityQuestion(check);
-    }
+    }*/
 
     public SecurityQuestion addSecurityQuestion(SecurityQuestion secure){
         return securityQuestionRepository.save(secure);

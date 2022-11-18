@@ -15,6 +15,6 @@ public interface SecurityQuestionRepository extends JpaRepository<SecurityQuesti
 
     void deleteByUser(User user);
 
-    SecurityQuestion findBySecurityQuestion(SecurityQuestion check);
+    //SecurityQuestion findBySecurityQuestion(SecurityQuestion check);
 
 }

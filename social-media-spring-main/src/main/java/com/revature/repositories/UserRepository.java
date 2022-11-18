@@ -17,8 +17,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findById(int id);
 
 
-    //updating password custom query
+    /*updating password custom query
     @Modifying
     @Query("update users u set u.password = :password where u.email = :email")
-    void updatePassword(@Param(value = "email") String email, @Param(value = "password") String password);
+    void updatePassword(@Param(value = "email") String email, @Param(value = "password") String password);*/
 }

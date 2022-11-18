@@ -44,10 +44,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    //update password
+    /*update password
     public void updatePassword(String email, String password){
         userRepository.updatePassword(email, password);
-    }
+    }*/
 
     // -----------------------------------------         VALIDATORS         ----------------------------------------- //
 

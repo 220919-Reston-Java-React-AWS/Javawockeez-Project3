@@ -106,7 +106,7 @@ public class AuthController {
     }
 
     //Beginning of password changing section
-    @PostMapping("/forgot-password")
+    /*@PostMapping("/forgot-password")
     public ResponseEntity checkQuestions(@RequestBody QuestionsRequest questionsRequest, HttpSession session){
         Optional<User> optional = authService.findByCredentials(questionsRequest.getEmail(), questionsRequest.getPassword());
 
@@ -174,5 +174,5 @@ public class AuthController {
         this.securityQuestionService.remove(user);
         return ResponseEntity.ok("Replaced questions successfully.");
     }
-
+ */
 }
