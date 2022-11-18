@@ -44,6 +44,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    //update password
+    public void updatePassword(String email, String password){
+        userRepository.updatePassword(email, password);
+    }
+
     // -----------------------------------------         VALIDATORS         ----------------------------------------- //
 
     // The methods below are very changeable if the database changes
