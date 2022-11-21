@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -73,8 +74,9 @@ public class PostControlTest {
         counter++; // In the before-each for curiosity's sake
 
         this.testUser = new User(1, "test@test.com", "password", "Testy", "McTestface");
-        this.subPost = new Post(2, "Test", "", new LinkedList<Post>(), this.testUser);
-        this.mainPost = new Post(1, "Hi", "", new LinkedList<Post>( Arrays.asList(this.subPost) ), this.testUser);
+        this.subPost = new Post(2, "Test", "", new LinkedList<Post>(), this.testUser, new Date());
+        this.mainPost = new Post(1, "Hi", "", new LinkedList<Post>( Arrays.asList(this.subPost) ), this.testUser,new Date()
+        );
 
         this.allPosts = Arrays.asList(this.mainPost, this.subPost);
     }
@@ -133,7 +135,7 @@ public class PostControlTest {
     @Test
     public void upsertPost_EXPECT_samePostWithNewId() throws Exception{
 
-        Post beforeUpsert = new Post(0, "Hi", "", new LinkedList<Post>( Arrays.asList(this.subPost) ), this.testUser);;
+        Post beforeUpsert = new Post(0, "Hi", "", new LinkedList<Post>( Arrays.asList(this.subPost) ), this.testUser, new Date());
 
         String inputJSON = objectMapper.writeValueAsString(beforeUpsert);
         String correctJsonString = objectMapper.writeValueAsString(mainPost);
