@@ -1,11 +1,8 @@
 package com.revature.controllers;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.QuestionsRequest;
 import com.revature.dtos.RegisterRequest;
-import com.revature.dtos.Response;
-import com.revature.exceptions.ExceptionLogger;
 import com.revature.exceptions.InvalidInputException;
 import com.revature.models.SampleQuestions1;
 import com.revature.models.SampleQuestions2;

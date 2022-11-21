@@ -9,7 +9,8 @@ spring:
             non_contextual_creation: true
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.H2Dialect
+#    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     defer-datasource-initialization: true
   datasource:
     url: jdbc:postgresql://spring-database.crx27ufqdeaf.us-west-2.rds.amazonaws.com:5432/postgres

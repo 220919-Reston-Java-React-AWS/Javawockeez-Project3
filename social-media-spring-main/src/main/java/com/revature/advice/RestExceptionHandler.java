@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class RestExceptionHandler {
-
-    @ExceptionHandler(NotLoggedInException.class)
-    public ResponseEntity<Object> handleNotLoggedInException(HttpServletRequest request, NotLoggedInException notLoggedInException) {
-
-        String errorMessage = "Must be logged in to perform this action";
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
-    }
+//
+//    @ExceptionHandler(NotLoggedInException.class)
+//    public ResponseEntity<Object> handleNotLoggedInException(HttpServletRequest request, NotLoggedInException notLoggedInException) {
+//
+//        String errorMessage = "Must be logged in to perform this action";
+//
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
+//    }
 }
