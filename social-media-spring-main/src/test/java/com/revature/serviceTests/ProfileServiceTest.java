@@ -14,10 +14,7 @@ import org.mockito.Mock;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 
@@ -56,8 +53,8 @@ public class ProfileServiceTest {
 
         // a list of posts for tests
         this.testAllPosts = Arrays.asList(
-            new Post(1, "Hello", "", new LinkedList<Post>(), this.testFoundUser),
-            new Post(2, "World", "", new LinkedList<Post>(), this.testFoundUser)
+            new Post(1, "Hello", "", new LinkedList<Post>(), this.testFoundUser, new Date()),
+            new Post(2, "World", "", new LinkedList<Post>(), this.testFoundUser, new Date())
         );
 
         // a default profile for user not wrapped by Optional<>
