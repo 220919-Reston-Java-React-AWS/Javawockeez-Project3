@@ -1,5 +1,7 @@
-package com.revature.exceptions;
+package com.revature.advice;
 
+import com.revature.exceptions.InvalidInputException;
+import com.revature.exceptions.NotLoggedInException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,7 +89,7 @@ public class ExceptionLogger {
     // If we get a 'bad' error (i.e. unexpected problems like SQL errors during normal operation) the exception is
     // logged in red with a black background.
     @ExceptionHandler
-    public final ResponseEntity<Exception> handleExceptions(Exception e, WebRequest request){
+    public final ResponseEntity handleExceptions(Exception e, WebRequest request){
         // To pass on later
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status;
@@ -100,6 +102,9 @@ public class ExceptionLogger {
         } else if (e instanceof NotLoggedInException){
             status = HttpStatus.UNAUTHORIZED;
             this.log(e, "green");
+            String errorMessage = "You must be logged in to perform this action";
+
+            return ResponseEntity.status(status).body(errorMessage);
 
         } else {
             status = HttpStatus.INTERNAL_SERVER_ERROR;

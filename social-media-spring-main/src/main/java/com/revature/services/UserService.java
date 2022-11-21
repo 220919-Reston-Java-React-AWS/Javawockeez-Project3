@@ -3,12 +3,17 @@ package com.revature.services;
 import com.revature.exceptions.InvalidInputException;
 import com.revature.models.User;
 import com.revature.repositories.UserRepository;
+
+import org.hibernate.QueryException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -49,10 +54,24 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    /*update password
+    //find by email
+    public Optional<User> findByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
+    //update password
     public void updatePassword(String email, String password){
-        userRepository.updatePassword(email, password);
-    }*/
+        Optional<User> orig = findByEmail(email);
+        if (orig.isEmpty()){
+            throw new QueryException("This user is not registered");
+        }
+
+        User original = orig.get();
+
+        original.setPassword(password);
+
+        userRepository.save(original);
+    }
 
     // -----------------------------------------         VALIDATORS         ----------------------------------------- //
 

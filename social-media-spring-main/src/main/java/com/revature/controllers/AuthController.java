@@ -1,11 +1,8 @@
 package com.revature.controllers;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.QuestionsRequest;
 import com.revature.dtos.RegisterRequest;
-import com.revature.dtos.Response;
-import com.revature.exceptions.ExceptionLogger;
 import com.revature.exceptions.InvalidInputException;
 import com.revature.models.SampleQuestions1;
 import com.revature.models.SampleQuestions2;
@@ -83,16 +80,9 @@ public class AuthController {
                 registerRequest.getFirstName(),
                 registerRequest.getLastName());
 
-        System.out.println(created);
-        System.out.println(registerRequest.getQuestion1());
-
         SecurityQuestion secure1 = new SecurityQuestion(0, registerRequest.getQuestion1(), registerRequest.getAnswer1(), created);
         SecurityQuestion secure2 = new SecurityQuestion(0, registerRequest.getQuestion2(), registerRequest.getAnswer2(), created);
         SecurityQuestion secure3 = new SecurityQuestion(0, registerRequest.getQuestion3(), registerRequest.getAnswer3(), created);
-
-        System.out.println(secure1);
-        System.out.println(secure2);
-        System.out.println(secure3);
 
         securityQuestionService.addSecurityQuestion(secure1);
         securityQuestionService.addSecurityQuestion(secure2);
@@ -106,32 +96,25 @@ public class AuthController {
     }
 
     //Beginning of password changing section
-    /*@PostMapping("/forgot-password")
-    public ResponseEntity checkQuestions(@RequestBody QuestionsRequest questionsRequest, HttpSession session){
-        Optional<User> optional = authService.findByCredentials(questionsRequest.getEmail(), questionsRequest.getPassword());
+    @PostMapping("/forgot-password")
+    public ResponseEntity checkQuestions(@RequestBody QuestionsRequest questionsRequest){
 
-        if(!optional.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
+        Optional<User> user = userService.findByEmail(questionsRequest.getEmail());
 
-        User user = new User();
-        user.setEmail(questionsRequest.getEmail());
+        if (user.isEmpty() == false){
 
-        SecurityQuestion check1 = new SecurityQuestion(0, questionsRequest.getQuestion1(), questionsRequest.getAnswer1(), user);
-        SecurityQuestion check2 = new SecurityQuestion(0, questionsRequest.getQuestion2(), questionsRequest.getAnswer2(), user);
-        SecurityQuestion check3 = new SecurityQuestion(0, questionsRequest.getQuestion3(), questionsRequest.getAnswer3(), user);
+        Optional<SecurityQuestion> check1 = securityQuestionService.findByQuestion(questionsRequest.getQuestion1(), questionsRequest.getAnswer1());
+        Optional<SecurityQuestion> check2 = securityQuestionService.findByQuestion(questionsRequest.getQuestion2(), questionsRequest.getAnswer2());
+        Optional<SecurityQuestion> check3 = securityQuestionService.findByQuestion(questionsRequest.getQuestion3(), questionsRequest.getAnswer3());
 
-        System.out.println(check1);
-        System.out.println(check2);
-        System.out.println(check3);
-
-        if(securityQuestionService.findbySecurityQuestion(check1) != null && securityQuestionService.findbySecurityQuestion(check2) != null && securityQuestionService.findbySecurityQuestion(check3) != null){
+        if(check1.isEmpty() == false && check2.isEmpty() == false && check3.isEmpty() == false){
             
             this.userService.updatePassword(questionsRequest.getEmail(), questionsRequest.getPassword());
             
             
             return ResponseEntity.ok("Password successfully updated");
         }
+    }
 
         return ResponseEntity.badRequest().build();
      
@@ -154,16 +137,7 @@ public class AuthController {
 
     @GetMapping("/security-questions/{email}")
     public ResponseEntity<List<SecurityQuestion>> userQuestions(@PathVariable String email){
-        User user = new User();
-        user.setEmail(email);
-        return ResponseEntity.ok(this.securityQuestionService.findByEmail(user));
-    }
-
-    @GetMapping("/test/{id}")
-    public ResponseEntity<List<SecurityQuestion>> userQuestions(@PathVariable int id){
-        User user = new User();
-        user.setId(id);
-
+        Optional<User> user = userService.findByEmail(email);
         return ResponseEntity.ok(this.securityQuestionService.findByCredentials(user));
     }
 
@@ -174,5 +148,4 @@ public class AuthController {
         this.securityQuestionService.remove(user);
         return ResponseEntity.ok("Replaced questions successfully.");
     }
- */
 }
