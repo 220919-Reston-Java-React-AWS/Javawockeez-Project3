@@ -40,7 +40,7 @@ public class ProfileService {
         return profileRepository.findByUser(user);
     }
 
-    // update the profile banner image
+    // update the profile data
     public Profile patchProfileData(Profile update) {
         return this.profileRepository.saveAndFlush(update);
     }

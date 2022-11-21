@@ -34,7 +34,5 @@ public class AccountController {
         }
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.accountService.patchAccountData(updateAccount));
-//
-//        return ResponseEntity.ok(this.accountService.patchAccountData(updateAccount));
     }
 }
