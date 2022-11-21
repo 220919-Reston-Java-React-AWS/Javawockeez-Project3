@@ -13,10 +13,7 @@ import org.mockito.Mock;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 
@@ -46,8 +43,8 @@ public class PostServiceTest {
         counter++; // In the before-each for curiosity's sake
 
         this.testUser = new User(1, "test@test.com", "password", "Testy", "McTestface");
-        this.subPost = new Post(2, "Test", "", new LinkedList<Post>(), this.testUser);
-        this.mainPost = new Post(1, "Hi", "", new LinkedList<Post>( Arrays.asList(this.subPost) ), this.testUser);
+        this.subPost = new Post(2, "Test", "", new LinkedList<Post>(), this.testUser, new Date(2022, 11, 11));
+        this.mainPost = new Post(1, "Hi", "", new LinkedList<Post>( Arrays.asList(this.subPost) ), this.testUser, new Date(2022, 11, 12));
 
         this.allPosts = Arrays.asList(this.mainPost, this.subPost);
     }
@@ -87,7 +84,7 @@ public class PostServiceTest {
 
     @Test
     public void getAllByAuthor_INSERT_testUser_EXPECT_testUsersPost(){
-        Post testPost = new Post(3, "Test", "", new ArrayList<>(), testUser);
+        Post testPost = new Post(3, "Test", "", new ArrayList<>(), testUser, new Date(2022, 12, 1));
         when(postRepository.findAllByAuthor(testUser)).thenReturn( Arrays.asList(testPost) );
 
         Assertions.assertEquals( Arrays.asList(testPost), ps.getAllByAuthor(testUser) );

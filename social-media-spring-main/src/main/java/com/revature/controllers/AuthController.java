@@ -1,15 +1,8 @@
 package com.revature.controllers;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.revature.dtos.LoginRequest;
-import com.revature.dtos.QuestionsRequest;
 import com.revature.dtos.RegisterRequest;
-import com.revature.dtos.Response;
-import com.revature.exceptions.ExceptionLogger;
 import com.revature.exceptions.InvalidInputException;
-import com.revature.models.SampleQuestions1;
-import com.revature.models.SampleQuestions2;
-import com.revature.models.SampleQuestions3;
 import com.revature.models.SecurityQuestion;
 import com.revature.models.User;
 import com.revature.services.AuthService;
@@ -24,7 +17,6 @@ import com.revature.services.UserService;
 
 import javax.servlet.http.HttpSession;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -82,21 +74,21 @@ public class AuthController {
                 registerRequest.getPassword(),
                 registerRequest.getFirstName(),
                 registerRequest.getLastName());
-
-        System.out.println(created);
-        System.out.println(registerRequest.getQuestion1());
-
-        SecurityQuestion secure1 = new SecurityQuestion(0, registerRequest.getQuestion1(), registerRequest.getAnswer1(), created);
-        SecurityQuestion secure2 = new SecurityQuestion(0, registerRequest.getQuestion2(), registerRequest.getAnswer2(), created);
-        SecurityQuestion secure3 = new SecurityQuestion(0, registerRequest.getQuestion3(), registerRequest.getAnswer3(), created);
-
-        System.out.println(secure1);
-        System.out.println(secure2);
-        System.out.println(secure3);
-
-        securityQuestionService.addSecurityQuestion(secure1);
-        securityQuestionService.addSecurityQuestion(secure2);
-        securityQuestionService.addSecurityQuestion(secure3);
+//
+//        System.out.println(created);
+//        System.out.println(registerRequest.getQuestion1());
+//
+//        SecurityQuestion secure1 = new SecurityQuestion(0, registerRequest.getQuestion1(), registerRequest.getAnswer1(), created);
+//        SecurityQuestion secure2 = new SecurityQuestion(0, registerRequest.getQuestion2(), registerRequest.getAnswer2(), created);
+//        SecurityQuestion secure3 = new SecurityQuestion(0, registerRequest.getQuestion3(), registerRequest.getAnswer3(), created);
+//
+//        System.out.println(secure1);
+//        System.out.println(secure2);
+//        System.out.println(secure3);
+//
+//        securityQuestionService.addSecurityQuestion(secure1);
+//        securityQuestionService.addSecurityQuestion(secure2);
+//        securityQuestionService.addSecurityQuestion(secure3);
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(created));
     }
 
