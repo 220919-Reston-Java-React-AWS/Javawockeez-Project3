@@ -11,10 +11,10 @@ import java.util.Optional;
 
 public interface SecurityQuestionRepository extends JpaRepository<SecurityQuestion, Integer> {
 
-    List<SecurityQuestion> findByUser(User user);
+    Optional<SecurityQuestion> findByQuestionAndAnswer(String question, String answer);
+    
+    List<SecurityQuestion> findByUser(Optional<User> user);
 
     void deleteByUser(User user);
-
-    //SecurityQuestion findBySecurityQuestion(SecurityQuestion check);
 
 }

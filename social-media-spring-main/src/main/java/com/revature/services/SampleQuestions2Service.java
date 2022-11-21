@@ -21,4 +21,5 @@ public class SampleQuestions2Service {
     public List<SampleQuestions2> listQuestions(){
         return this.sampleQuestions2Repository.findAll();
     }
+
 }

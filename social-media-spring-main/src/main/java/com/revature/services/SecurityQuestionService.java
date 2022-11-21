@@ -7,6 +7,7 @@ import com.revature.models.User;
 import com.revature.repositories.SecurityQuestionRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -19,25 +20,20 @@ public class SecurityQuestionService {
     @Autowired
     private SecurityQuestionRepository securityQuestionRepository;
 
-    public SecurityQuestionService(SecurityQuestionRepository securityQuestionRepository, UserService userService){
+    public SecurityQuestionService(SecurityQuestionRepository securityQuestionRepository){
         this.securityQuestionRepository = securityQuestionRepository;
     }
 
-    /*public SecurityQuestion findbySecurityQuestion(SecurityQuestion check){
-        System.out.println("made it to service");
-        return securityQuestionRepository.findBySecurityQuestion(check);
-    }*/
+    public Optional<SecurityQuestion> findByQuestion(String question, String answer){
+        return securityQuestionRepository.findByQuestionAndAnswer(question, answer);
+    }
 
     public SecurityQuestion addSecurityQuestion(SecurityQuestion secure){
         return securityQuestionRepository.save(secure);
     }
 
-    public List<SecurityQuestion> findByCredentials(User user){
+    public List<SecurityQuestion> findByCredentials(Optional<User> user){
         return this.securityQuestionRepository.findByUser(user);
-    }
-
-    public List<SecurityQuestion> findByEmail(User email){
-        return this.securityQuestionRepository.findByUser(email);
     }
 
     @Transactional
