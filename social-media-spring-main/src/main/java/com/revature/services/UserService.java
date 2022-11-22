@@ -60,10 +60,14 @@ public class UserService {
     }
 
     //update password
-    public void updatePassword(String email, String password){
+    public boolean updatePassword(String email, String password) throws InvalidInputException{
         Optional<User> orig = findByEmail(email);
         if (orig.isEmpty()){
             throw new QueryException("This user is not registered");
+        }
+
+        if (validPassword(password) == false){
+            throw new InvalidInputException("Your password must be between 6 and 20 characters in length.");
         }
 
         User original = orig.get();
@@ -71,6 +75,8 @@ public class UserService {
         original.setPassword(password);
 
         userRepository.save(original);
+
+        return true;
     }
 
     // -----------------------------------------         VALIDATORS         ----------------------------------------- //

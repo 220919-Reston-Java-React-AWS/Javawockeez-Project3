@@ -23,8 +23,11 @@ public class UserServiceTest {
     Optional<User> testFoundUserOptional;
     User testFoundUser;
     Optional<User> testNotFoundUserOptional;
-    User testNotFoundUser;
     User testPatchUser; // for patchAccountData tests
+
+    //Password Strings
+    String email;
+    String newPassword;
 
     @BeforeEach
     void initTestValues(){
@@ -33,8 +36,15 @@ public class UserServiceTest {
         // the default Optional<User> representation of a User in database
         this.testFoundUserOptional = Optional.of(testFoundUser);
 
+        //instantiating to avoid null
+        this.testNotFoundUserOptional = Optional.empty();
+
         // a representation of a User that wants updated their info in database
         this.testPatchUser = new User(1,"testuser@test.com", "password123", "test","user");
+
+        //new password
+        this.email = new String("testuser@test.com");
+        this.newPassword = new String("password");
     }
 
     /*------Optional<User> findByCredentials(String email, String password) Tests------*/
@@ -112,11 +122,11 @@ public class UserServiceTest {
     // because of Optional<T>, test if Optional<User> values are as expected if user is not found
     // No clue if the test above checks the User's properties values from being Optional<> wrapped, so testing that here
     @Test
-    public void findByCredentials_notFoundUser_OptionalEqualsUser(){
+    public void findByCredentials_notFoundUser_OptionalIsEmpty(){
         try{
             when(userService.findByCredentials("test@test.com", "password123")).thenReturn(testNotFoundUserOptional);
 
-            Assertions.assertEquals(testNotFoundUser, userService.findByCredentials("test@test.com", "password123").get());
+            Assertions.assertTrue(userService.findByCredentials("test@test.com", "password123").isEmpty());
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -200,11 +210,11 @@ public class UserServiceTest {
     // because of Optional<T>, test if Optional<User> values are as expected if user is not found
     // No clue if the test above checks the User's properties values from being Optional<> wrapped, so testing that here
     @Test
-    public void findByCredentials_withId_notFoundUser_OptionalEqualsUser(){
+    public void findByCredentials_withId_notFoundUser_OptionalIsEmpty(){
         try{
             when(userService.findByCredentials(1)).thenReturn(testNotFoundUserOptional);
 
-            Assertions.assertEquals(testNotFoundUser, userService.findByCredentials(1).get());
+            Assertions.assertTrue(userService.findByCredentials(1).isEmpty());
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -231,5 +241,17 @@ public class UserServiceTest {
 
     /*------Other Tests Below Here------*/
 
+    //Test update password method
+    @Test
+    public void updateUserPassword(){
+        try{
+            when(userService.updatePassword(email, newPassword)).thenReturn(true);
+
+            Assertions.assertEquals(newPassword, userService.updatePassword(email, newPassword));
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 
 }

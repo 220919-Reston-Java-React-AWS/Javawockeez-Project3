@@ -40,7 +40,6 @@ public class ProfileServiceTest {
     Optional<Profile> testFoundProfileOptional; // for Optional<Profile> findByUser(User user) tests
     Profile testFoundProfile;
     Optional<Profile> testNotFoundProfileOptional;
-    Profile testNotFoundProfile;
 
     Profile testPatchProfile;   // for Profile patchProfileData(Profile update) tests
 
@@ -61,6 +60,10 @@ public class ProfileServiceTest {
         this.testFoundProfile = new Profile(1,"about me", "avatar.jpg", "banner.jpg", testFoundUser);
         // the default Optional<Profile> representation of Profile in database
         this.testFoundProfileOptional = Optional.of(testFoundProfile);
+
+        // optional object would be empty
+        this.testNotFoundUserOptional = Optional.empty();
+        this.testNotFoundProfileOptional = Optional.empty();
 
         // example of an update to Profile by user
         this.testPatchProfile = new Profile(1,"about","avatar.jpg","banner.jpg",testFoundUser);
@@ -142,11 +145,11 @@ public class ProfileServiceTest {
     // because of Optional<T>, test if Optional<User> values are as expected if user is not found
     // No clue if the test above checks the User's properties values from being Optional<> wrapped, so testing that here
     @Test
-    public void findByCredentials_withId_notFoundUser_OptionalEqualsUser(){
+    public void findByCredentials_withId_notFoundUser_OptionalIsEmpty(){
         try{
             when(profileService.findByCredentials(1)).thenReturn(testNotFoundUserOptional);
 
-            Assertions.assertEquals(testNotFoundUser, profileService.findByCredentials(1).get());
+            Assertions.assertTrue(profileService.findByCredentials(1).isEmpty());
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -257,11 +260,11 @@ public class ProfileServiceTest {
     // because of Optional<T>, test if Optional<UProfile> values are as expected if profile is found
     // No clue if the test above checks the User's properties values from being Optional<> wrapped, so testing that here
     @Test
-    public void findByUser_notFoundProfile_OptionalEqualsUser(){
+    public void findByUser_notFoundProfile_OptionalIsEmpty(){
         try{
             when(profileService.findByUser(testFoundUser)).thenReturn(testNotFoundProfileOptional);
 
-            Assertions.assertEquals(testNotFoundProfile, profileService.findByUser(testFoundUser).get());
+            Assertions.assertTrue(profileService.findByUser(testFoundUser).isEmpty());
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -277,6 +280,20 @@ public class ProfileServiceTest {
             when(profileService.patchProfileData(testPatchProfile)).thenReturn(testPatchProfile);
 
             Assertions.assertEquals(testPatchProfile, profileService.patchProfileData(testPatchProfile));
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /*------registerProfile(Profile registerProfile) Tests------*/
+
+    @Test
+    public void registerProfile_profileDataRegister(){
+        try{
+            when(profileService.registerProfile(testPatchProfile)).thenReturn(testPatchProfile);
+
+            Assertions.assertEquals(testPatchProfile, profileService.registerProfile(testPatchProfile));
         }
         catch (Exception e){
             System.out.println(e.getMessage());

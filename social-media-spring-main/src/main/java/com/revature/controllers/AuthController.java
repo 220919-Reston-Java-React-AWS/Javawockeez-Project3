@@ -4,20 +4,11 @@ import com.revature.dtos.LoginRequest;
 import com.revature.dtos.QuestionsRequest;
 import com.revature.dtos.RegisterRequest;
 import com.revature.exceptions.InvalidInputException;
-import com.revature.models.SampleQuestions1;
-import com.revature.models.SampleQuestions2;
-import com.revature.models.SampleQuestions3;
-import com.revature.models.SecurityQuestion;
-import com.revature.models.User;
-import com.revature.services.AuthService;
+import com.revature.models.*;
+import com.revature.services.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.revature.services.SampleQuestions1Service;
-import com.revature.services.SampleQuestions2Service;
-import com.revature.services.SampleQuestions3Service;
-import com.revature.services.SecurityQuestionService;
-import com.revature.services.UserService;
 
 import javax.servlet.http.HttpSession;
 
@@ -32,6 +23,7 @@ public class AuthController {
     private final AuthService authService;
 
     private final UserService userService;
+    private final ProfileService profileService;
 
     private final SampleQuestions1Service sampleQuestions1Service;
 
@@ -42,13 +34,18 @@ public class AuthController {
     private final SecurityQuestionService securityQuestionService;
 
 
-    public AuthController(AuthService authService, UserService userService, SampleQuestions1Service sampleQuestions1Service, SampleQuestions2Service sampleQuestions2Service, SampleQuestions3Service sampleQuestions3Service, SecurityQuestionService securityQuestionService) {
+    public AuthController(AuthService authService, UserService userService,
+          SampleQuestions1Service sampleQuestions1Service, SampleQuestions2Service sampleQuestions2Service,
+          SampleQuestions3Service sampleQuestions3Service, SecurityQuestionService securityQuestionService,
+          ProfileService profileService
+    ) {
         this.authService = authService;
         this.userService = userService;
         this.sampleQuestions1Service = sampleQuestions1Service;
         this.sampleQuestions2Service = sampleQuestions2Service;
         this.sampleQuestions3Service = sampleQuestions3Service;
         this.securityQuestionService = securityQuestionService;
+        this.profileService = profileService;
     }
 
     @PostMapping("/login")
@@ -80,6 +77,17 @@ public class AuthController {
                 registerRequest.getFirstName(),
                 registerRequest.getLastName());
 
+        // need to save register user object first, returns the instantiated user
+        created = authService.register(created);
+
+        // Now we can use the registered user for the other registers
+        /*** register a new profile ***/
+        Profile registerProfile = new Profile();
+        registerProfile.setId(0);
+        registerProfile.setUser(created);
+        profileService.registerProfile(registerProfile);
+
+        /*** register the security questions ***/
         SecurityQuestion secure1 = new SecurityQuestion(0, registerRequest.getQuestion1(), registerRequest.getAnswer1(), created);
         SecurityQuestion secure2 = new SecurityQuestion(0, registerRequest.getQuestion2(), registerRequest.getAnswer2(), created);
         SecurityQuestion secure3 = new SecurityQuestion(0, registerRequest.getQuestion3(), registerRequest.getAnswer3(), created);
@@ -87,7 +95,9 @@ public class AuthController {
         securityQuestionService.addSecurityQuestion(secure1);
         securityQuestionService.addSecurityQuestion(secure2);
         securityQuestionService.addSecurityQuestion(secure3);
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(created));
+
+        // return the user as it was originally
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping("/hello")
@@ -97,7 +107,7 @@ public class AuthController {
 
     //Beginning of password changing section
     @PostMapping("/forgot-password")
-    public ResponseEntity checkQuestions(@RequestBody QuestionsRequest questionsRequest){
+    public ResponseEntity checkQuestions(@RequestBody QuestionsRequest questionsRequest) throws InvalidInputException{
 
         Optional<User> user = userService.findByEmail(questionsRequest.getEmail());
 
