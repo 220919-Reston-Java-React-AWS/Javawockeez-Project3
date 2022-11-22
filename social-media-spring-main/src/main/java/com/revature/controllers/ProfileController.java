@@ -116,7 +116,7 @@ public class ProfileController {
     //update security questions
 
     @PostMapping("/update-questions/{id}")
-    public ResponseEntity updateQuestions(@RequestBody UpdateQuestions updateQuestions, @PathVariable int id){
+    public ResponseEntity updateQuestions(@RequestBody UpdateQuestions updateQuestions, @PathVariable int id) throws InvalidInputException{
 
         User user = new User();
         user.setId(id);
@@ -137,7 +137,7 @@ public class ProfileController {
     
     //update password
     @PostMapping("/update-password/{email}")
-    public ResponseEntity updatePassword(@RequestBody UpdatePassword updatePassword, @PathVariable String email){
+    public ResponseEntity updatePassword(@RequestBody UpdatePassword updatePassword, @PathVariable String email) throws InvalidInputException{
         this.userService.updatePassword(email, updatePassword.getPassword());
         return ResponseEntity.ok("Password updated successfully.");
     }

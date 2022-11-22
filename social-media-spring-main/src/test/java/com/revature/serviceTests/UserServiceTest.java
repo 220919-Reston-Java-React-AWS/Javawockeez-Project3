@@ -26,6 +26,10 @@ public class UserServiceTest {
     User testNotFoundUser;
     User testPatchUser; // for patchAccountData tests
 
+    //Password Strings
+    String email;
+    String newPassword;
+
     @BeforeEach
     void initTestValues(){
         // the default User representation not wrapped by Optional<>
@@ -35,6 +39,10 @@ public class UserServiceTest {
 
         // a representation of a User that wants updated their info in database
         this.testPatchUser = new User(1,"testuser@test.com", "password123", "test","user");
+
+        //new password
+        this.email = new String("testuser@test.com");
+        this.newPassword = new String("password");
     }
 
     /*------Optional<User> findByCredentials(String email, String password) Tests------*/
@@ -231,5 +239,17 @@ public class UserServiceTest {
 
     /*------Other Tests Below Here------*/
 
+    //Test update password method
+    @Test
+    public void updateUserPassword(){
+        try{
+            when(userService.updatePassword(email, newPassword)).thenReturn(true);
+
+            Assertions.assertEquals(newPassword, userService.updatePassword(email, newPassword));
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 
 }

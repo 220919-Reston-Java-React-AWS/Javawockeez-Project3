@@ -97,7 +97,7 @@ public class AuthController {
 
     //Beginning of password changing section
     @PostMapping("/forgot-password")
-    public ResponseEntity checkQuestions(@RequestBody QuestionsRequest questionsRequest){
+    public ResponseEntity checkQuestions(@RequestBody QuestionsRequest questionsRequest) throws InvalidInputException{
 
         Optional<User> user = userService.findByEmail(questionsRequest.getEmail());
 

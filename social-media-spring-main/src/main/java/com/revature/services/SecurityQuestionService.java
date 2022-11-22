@@ -28,7 +28,11 @@ public class SecurityQuestionService {
         return securityQuestionRepository.findByQuestionAndAnswer(question, answer);
     }
 
-    public SecurityQuestion addSecurityQuestion(SecurityQuestion secure){
+    public SecurityQuestion addSecurityQuestion(SecurityQuestion secure) throws InvalidInputException{
+
+        if (!validAnswer(secure.getAnswer())){
+            throw new InvalidInputException("Answer cannot be empty.");
+        }
         return securityQuestionRepository.save(secure);
     }
 
@@ -40,5 +44,12 @@ public class SecurityQuestionService {
     public void remove(User user){
         this.securityQuestionRepository.deleteByUser(user);
         return;
+    }
+
+    //-------- Validators -------
+
+    //validate answer
+    public boolean validAnswer(String answer){
+        return (answer.length()>0);
     }
 }

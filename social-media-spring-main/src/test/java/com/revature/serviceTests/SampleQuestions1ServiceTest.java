@@ -23,13 +23,15 @@ public class SampleQuestions1ServiceTest {
 
     /*-------Arranged Values for Tests------*/
     SampleQuestions1 testQuestion1;
+    SampleQuestions1 testQuestion2;
     List<SampleQuestions1> testQuestionList;
 
     @BeforeEach
     void initTestValues(){
         // set question
         this.testQuestion1 = new SampleQuestions1(1, "test question");
-        this.testQuestionList = Arrays.asList(testQuestion1);
+        this.testQuestion2 = new SampleQuestions1(2, "test question 2");
+        this.testQuestionList = Arrays.asList(testQuestion1, testQuestion2);
     }
 
 
