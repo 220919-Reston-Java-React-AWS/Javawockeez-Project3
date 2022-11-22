@@ -23,7 +23,7 @@ public class SecurityQuestion {
     private int id;
     private String question;
     private String answer;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     private User user;
 
 }
