@@ -44,4 +44,9 @@ public class ProfileService {
     public Profile patchProfileData(Profile update) {
         return this.profileRepository.saveAndFlush(update);
     }
+
+    // create a new profile for new user
+    public Profile registerProfile(Profile registerProfile){
+        return this.profileRepository.save(registerProfile);
+    }
 }

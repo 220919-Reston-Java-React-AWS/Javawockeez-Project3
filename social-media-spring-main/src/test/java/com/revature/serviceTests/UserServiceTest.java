@@ -23,7 +23,6 @@ public class UserServiceTest {
     Optional<User> testFoundUserOptional;
     User testFoundUser;
     Optional<User> testNotFoundUserOptional;
-    User testNotFoundUser;
     User testPatchUser; // for patchAccountData tests
 
     @BeforeEach
@@ -32,6 +31,9 @@ public class UserServiceTest {
         this.testFoundUser = new User(1, "test@test.com", "password", "test", "user");
         // the default Optional<User> representation of a User in database
         this.testFoundUserOptional = Optional.of(testFoundUser);
+
+        //instantiating to avoid null
+        this.testNotFoundUserOptional = Optional.empty();
 
         // a representation of a User that wants updated their info in database
         this.testPatchUser = new User(1,"testuser@test.com", "password123", "test","user");
@@ -112,11 +114,11 @@ public class UserServiceTest {
     // because of Optional<T>, test if Optional<User> values are as expected if user is not found
     // No clue if the test above checks the User's properties values from being Optional<> wrapped, so testing that here
     @Test
-    public void findByCredentials_notFoundUser_OptionalEqualsUser(){
+    public void findByCredentials_notFoundUser_OptionalIsEmpty(){
         try{
             when(userService.findByCredentials("test@test.com", "password123")).thenReturn(testNotFoundUserOptional);
 
-            Assertions.assertEquals(testNotFoundUser, userService.findByCredentials("test@test.com", "password123").get());
+            Assertions.assertTrue(userService.findByCredentials("test@test.com", "password123").isEmpty());
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -200,11 +202,11 @@ public class UserServiceTest {
     // because of Optional<T>, test if Optional<User> values are as expected if user is not found
     // No clue if the test above checks the User's properties values from being Optional<> wrapped, so testing that here
     @Test
-    public void findByCredentials_withId_notFoundUser_OptionalEqualsUser(){
+    public void findByCredentials_withId_notFoundUser_OptionalIsEmpty(){
         try{
             when(userService.findByCredentials(1)).thenReturn(testNotFoundUserOptional);
 
-            Assertions.assertEquals(testNotFoundUser, userService.findByCredentials(1).get());
+            Assertions.assertTrue(userService.findByCredentials(1).isEmpty());
         }
         catch (Exception e){
             System.out.println(e.getMessage());
