@@ -6,6 +6,8 @@ import com.revature.models.Profile;
 import com.revature.models.User;
 import com.revature.repositories.ProfileRepository;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.List;
 
 import java.net.URI;
@@ -31,7 +33,9 @@ public class ProfileService {
     }
 
     // get the list of post by user id
+    @Transactional
     public List<Post> getAllByAuthor(User author) {
+
         return postService.getAllByAuthor(author);
     }
 

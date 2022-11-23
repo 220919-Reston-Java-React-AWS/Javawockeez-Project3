@@ -30,7 +30,7 @@ public class PostService {
 
 	// added for all user profile posts by id
 	public List<Post> getAllByAuthor(User id) {
-		return this.postRepository.findAllByAuthor(id);
+		return this.postRepository.findAllByAuthorId(id.getId());
 	}
 
 	public List<Post> getParents() {
