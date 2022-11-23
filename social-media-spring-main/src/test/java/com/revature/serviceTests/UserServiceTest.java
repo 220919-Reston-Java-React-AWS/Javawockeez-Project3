@@ -245,11 +245,9 @@ public class UserServiceTest {
     @Test
     public void updateUserPassword(){
         try{
-            when(userService.updatePassword(email, newPassword)).thenReturn(true);
-
-            Assertions.assertEquals(newPassword, userService.updatePassword(email, newPassword));
+            doNothing().when(userService).updatePassword(email, newPassword);
         }
-        catch(Exception e){
+        catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
