@@ -243,11 +243,12 @@ public class UserServiceTest {
 
     //Test update password method
     @Test
-    public void updateUserPassword(){
+    public void updateUserPassword_INPUT_newPassword_EXPECT_userWithUpdatedPassword(){
         try{
-            when(userService.updatePassword(email, newPassword)).thenReturn(true);
+            when(userService.findByEmail(email)).thenReturn( Optional.of(testPatchUser) );
+            doNothing().when(userRepository).save(testFoundUser);
 
-            Assertions.assertEquals(newPassword, userService.updatePassword(email, newPassword));
+            Assertions.assertEquals(testFoundUser, userService.updatePassword(email, newPassword));
         }
         catch(Exception e){
             System.out.println(e.getMessage());

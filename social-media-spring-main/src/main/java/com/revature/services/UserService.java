@@ -60,7 +60,7 @@ public class UserService {
     }
 
     //update password
-    public void updatePassword(String email, String password) throws InvalidInputException{
+    public User updatePassword(String email, String password) throws InvalidInputException{
         Optional<User> orig = findByEmail(email);
         if (orig.isEmpty()){
             throw new QueryException("This user is not registered");
@@ -75,6 +75,8 @@ public class UserService {
         original.setPassword(password);
 
         userRepository.save(original);
+
+        return original;
     }
 
     // -----------------------------------------         VALIDATORS         ----------------------------------------- //
