@@ -148,6 +148,7 @@ public class AuthController {
     @GetMapping("/security-questions/{email}")
     public ResponseEntity<List<SecurityQuestion>> userQuestions(@PathVariable String email){
         Optional<User> user = userService.findByEmail(email);
+        System.out.println(user);
         return ResponseEntity.ok(this.securityQuestionService.findByCredentials(user));
     }
 
