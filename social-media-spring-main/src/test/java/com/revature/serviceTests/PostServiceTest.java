@@ -85,14 +85,14 @@ public class PostServiceTest {
     @Test
     public void getAllByAuthor_INSERT_testUser_EXPECT_testUsersPost(){
         Post testPost = new Post(3, "Test", "", new ArrayList<>(), testUser, new Date(2022, 12, 1));
-        when(postRepository.findAllByAuthor(testUser)).thenReturn( Arrays.asList(testPost) );
+        when(postRepository.findAllByAuthorId(testUser.getId())).thenReturn( Arrays.asList(testPost) );
 
         Assertions.assertEquals( Arrays.asList(testPost), ps.getAllByAuthor(testUser) );
     }
 
     @Test
     public void getAllByAuthor_INSERT_testUserWithNoPosts_EXPECT_none(){
-        when(postRepository.findAllByAuthor(testUser)).thenReturn( Arrays.asList() );
+        when(postRepository.findAllByAuthorId(testUser.getId())).thenReturn( Arrays.asList() );
 
         Assertions.assertEquals( Arrays.asList(), ps.getAllByAuthor(testUser) );
     }
