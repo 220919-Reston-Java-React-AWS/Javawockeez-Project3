@@ -3,8 +3,10 @@ package com.revature.controlTests;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.controllers.ProfileController;
+import com.revature.dtos.UpdateQuestions;
 import com.revature.models.Post;
 import com.revature.models.User;
+import com.revature.repositories.SecurityQuestionRepository;
 import com.revature.models.Profile;
 import com.revature.models.SampleQuestions1;
 import com.revature.models.SampleQuestions2;
@@ -39,6 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.*;
 
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -48,6 +52,8 @@ public class ProfileControllerTest {
     ProfileService profileService;
     @Mock
     SecurityQuestionService securityQuestionService;
+    @Mock
+    SecurityQuestionRepository securityQuestionRepository;
     @Mock
     UserService userService;
     @Mock
@@ -270,19 +276,21 @@ public class ProfileControllerTest {
 
 
     /*------Other Tests Here------*/
-    // get questions by email
+
+
+    // get questions by id
 
     @Test
-    public void securityQuestionByEmail() throws Exception{
+    public void securityQuestionById() throws Exception{
          // creating the string returned from json
          String expectedResults = objectMapper.writeValueAsString(user1Questions);
 
          // use methods to test
+         when(userService.findByCredentials(1)).thenReturn(optionalUser);
          when(securityQuestionService.findByCredentials(optionalUser)).thenReturn(user1Questions);
-         when(userService.findByEmail("testy@gmail.com")).thenReturn(optionalUser);
-
+         
          // execute the test
-         mvc.perform(get(baseUrl + "/security-questions/testy@gmail.com").contentType(MediaType.APPLICATION_JSON))
+         mvc.perform(get(baseUrl + "/security-questions/1").contentType(MediaType.APPLICATION_JSON))
                  .andExpect(status().isOk())
                  .andExpect(content().json(expectedResults));
      }
@@ -340,7 +348,18 @@ public class ProfileControllerTest {
      /*@Test
      public void updateSecurityQuestions() throws Exception{
         // create string to be returned by json
-        String inputJSON = objectMapper.writeValueAsString(updatedList);
+        String inputJSON = "\"question\":\"update1\"," +
+        "\"answer\":\"answer\",{\"id\":1,\"email\":\"testy@test.com\",\"firstName\":\"testy\",\"lastName\":\"testers\"}," +
+        "\"question\":\"update2\"," +
+        "\"answer\":\"answer\",{\"id\":1,\"email\":\"testy@test.com\",\"firstName\":\"testy\",\"lastName\":\"testers\"}," +
+        "\"question\":\"update3\"," +
+        "\"answer\":\"answer\",{\"id\":1,\"email\":\"testy@test.com\",\"firstName\":\"testy\",\"lastName\":\"testers\"}";
+
+        
+
+
+        this.updateQuestion1 = new SecurityQuestion(7, "update1", "answer", user1);
+
 
         //test methods
         doNothing().when(securityQuestionService).remove(testAllPostsUser);
@@ -348,24 +367,12 @@ public class ProfileControllerTest {
         when(securityQuestionService.addSecurityQuestion(updateQuestion2)).thenReturn(updateQuestion2);
         when(securityQuestionService.addSecurityQuestion(updateQuestion3)).thenReturn(updateQuestion3);
 
+        
         //execute test
         mvc.perform(post(baseUrl + "/update-questions/1").contentType(MediaType.APPLICATION_JSON).content(inputJSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-     }
-
-     // update password
-
-     @Test
-     public void updatePassword() throws Exception{
-        // creates string to be returned by json
-        String inputJSON = objectMapper.writeValueAsString(newPasswordUser);
-
-        //test methods
-        doNothing().when(userService).updatePassword(email, newPassword);
-
-        //execute test
-        mvc.perform(post(baseUrl + "/update-password/testy@gmail.com").contentType(MediaType.APPLICATION_JSON).contentType(inputJSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        .andDo(print())
+        .andExpect( status().isOk() )
+        .andExpect( content().string( "Questions successfully updated" ) );
      }*/
 
 }

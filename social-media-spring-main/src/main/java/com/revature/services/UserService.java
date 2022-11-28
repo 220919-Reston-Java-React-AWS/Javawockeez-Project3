@@ -111,6 +111,10 @@ public class UserService {
         return ( last.matches("[-a-z. A-Z]+")  &&  last.length()<31 );
     }
 
+    public Object findByCredentials(String string) {
+        return null;
+    }
+
     // ** NOTE:  "[-a-z. A-Z]+" is regex. It looks for a dash, letters a-z, periods, spaces, and letters A-Z. Order matters. [ ]+ checks existence
 
 }
