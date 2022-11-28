@@ -108,14 +108,13 @@ public class ProfileControllerTest {
     String answer;
     String email;
     String newPassword;
-
     Optional<User> testFindByCredentials_UserOptional; // for testing ResponseEntity<User> getUserProfileName(@PathVariable int id)
     User testFindByCredentials_User;
-
     User testGetProfileByUserId_User;   // for testing ResponseEntity<Profile> getProfileByUserId(@PathVariable int id)
     Profile testProfileByUserId_Profile;
     Optional<Profile> testProfileByUserId_ProfileOptional;
     Optional<Profile> testProfileByUserId_ProfileOptionalEmpty;
+    UpdateQuestions updateQuestions;
 
     Profile testPatchProfileData_Update; // for testing ResponseEntity patchProfileData(@RequestBody Profile update)
 
@@ -149,9 +148,6 @@ public class ProfileControllerTest {
         this.testQuestion1 = new SecurityQuestion(1, "test question1", "answer", user1);
         this.testQuestion2 = new SecurityQuestion(2, "test question2", "answer", user1);
         this.testQuestion3 = new SecurityQuestion(3, "test question3", "answer", user1);
-        this.updateQuestion1 = new SecurityQuestion(7, "update1", "answer", user1);
-        this.updateQuestion2 = new SecurityQuestion(8, "update2", "answer", user1);
-        this.updateQuestion3 = new SecurityQuestion(9, "update3", "answer", user1);
         this.optionalQuestion = Optional.of(testQuestion1);
         this.sample1Question1 = new SampleQuestions1(1, "test question");
         this.sample1Question2 = new SampleQuestions1(2, "test question 2");
@@ -167,6 +163,9 @@ public class ProfileControllerTest {
         this.sample3QuestionsList = Arrays.asList(sample3Question1, sample3Question2);
         this.sampleQuestions1List = Arrays.asList(sample1Question1, sample1Question2);
         this.sampleQuestions2List = Arrays.asList(sample2Question1, sample2Question2);
+
+        //set updateQuestions
+        this.updateQuestions = new UpdateQuestions("update1", "answer", "update2", "answer", "update3", "answer");
         
         // test posts
         this.testAllPostsUser = new User();
@@ -345,24 +344,15 @@ public class ProfileControllerTest {
 
      // update security questions
 
-     /*@Test
+     @Test
      public void updateSecurityQuestions() throws Exception{
         // create string to be returned by json
-        String inputJSON = "\"question\":\"update1\"," +
-        "\"answer\":\"answer\",{\"id\":1,\"email\":\"testy@test.com\",\"firstName\":\"testy\",\"lastName\":\"testers\"}," +
-        "\"question\":\"update2\"," +
-        "\"answer\":\"answer\",{\"id\":1,\"email\":\"testy@test.com\",\"firstName\":\"testy\",\"lastName\":\"testers\"}," +
-        "\"question\":\"update3\"," +
-        "\"answer\":\"answer\",{\"id\":1,\"email\":\"testy@test.com\",\"firstName\":\"testy\",\"lastName\":\"testers\"}";
-
-        
-
-
-        this.updateQuestion1 = new SecurityQuestion(7, "update1", "answer", user1);
+         String inputJSON = objectMapper.writeValueAsString(updateQuestions);
 
 
         //test methods
-        doNothing().when(securityQuestionService).remove(testAllPostsUser);
+        doNothing().when(securityQuestionService).remove(user1);
+        securityQuestionService.remove(user1);
         when(securityQuestionService.addSecurityQuestion(updateQuestion1)).thenReturn(updateQuestion1);
         when(securityQuestionService.addSecurityQuestion(updateQuestion2)).thenReturn(updateQuestion2);
         when(securityQuestionService.addSecurityQuestion(updateQuestion3)).thenReturn(updateQuestion3);
@@ -373,6 +363,6 @@ public class ProfileControllerTest {
         .andDo(print())
         .andExpect( status().isOk() )
         .andExpect( content().string( "Questions successfully updated" ) );
-     }*/
+     }
 
 }

@@ -26,6 +26,7 @@ public class UserServiceTest {
     Optional<User> testFoundUserOptional;
     User testFoundUser;
     Optional<User> testNotFoundUserOptional;
+    Optional<User> updatedUser;
     User testPatchUser; // for patchAccountData tests
 
     //Password Strings
@@ -38,12 +39,14 @@ public class UserServiceTest {
         this.testFoundUser = new User(1, "test@test.com", "password", "test", "user");
         // the default Optional<User> representation of a User in database
         this.testFoundUserOptional = Optional.of(testFoundUser);
+        // updated optional user
+        this.updatedUser = Optional.of(new User(1, "testuser@gmail.com", "password", "test", "user"));
 
         //instantiating to avoid null
         this.testNotFoundUserOptional = Optional.empty();
 
         // a representation of a User that wants updated their info in database
-        this.testPatchUser = new User(1,"testuser@test.com", "password123", "test","user");
+        this.testPatchUser = new User(1, "testuser@test.com", "password123", "test", "user");
 
         //new password
         this.email = new String("testuser@test.com");
@@ -54,43 +57,40 @@ public class UserServiceTest {
 
     // because of Optional<T>, test if Optional<> contains a value if user is found (present)
     @Test
-    public void findByCredentials_optionalContainsAValue_ifUserIsFound(){
-        try{
+    public void findByCredentials_optionalContainsAValue_ifUserIsFound() {
+        try {
             // this is not used due to how assertTrue() method works
             // but assume this was the case that was executed
             when(userService.findByCredentials("test@test.com", "password")).thenReturn(testFoundUserOptional);
 
             Assertions.assertTrue(testFoundUserOptional.isPresent());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     // because of Optional<T>, test if Optional<> does not contain a value if user is not found (empty)
     @Test
-    public void findByCredentials_optionalContainsNoValue_ifUserNotFound(){
-        try{
+    public void findByCredentials_optionalContainsNoValue_ifUserNotFound() {
+        try {
             // this is not used due to how assertTrue() method works
             // but assume this was the case that was executed
             when(userService.findByCredentials("test@test.com", "password123")).thenReturn(testNotFoundUserOptional);
 
             Assertions.assertTrue(testNotFoundUserOptional.isEmpty());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     // because of Optional<T>, test if Optional<User> values are as expected if user is found
     @Test
-    public void findByCredentials_foundUser_OptionalEqualsOptional(){
-        try{
+    public void findByCredentials_foundUser_OptionalEqualsOptional() {
+        try {
             when(userService.findByCredentials("test@test.com", "password")).thenReturn(testFoundUserOptional);
 
             Assertions.assertEquals(testFoundUserOptional, userService.findByCredentials("test@test.com", "password"));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -98,8 +98,8 @@ public class UserServiceTest {
     // because of Optional<T>, test if Optional<User> values are as expected if user is found
     // No clue if the test above checks the User's properties values from being Optional<> wrapped, so testing that here
     @Test
-    public void findByCredentials_foundUser_OptionalEqualsUser(){
-        try{
+    public void findByCredentials_foundUser_OptionalEqualsUser() {
+        try {
             when(userService.findByCredentials("test@test.com", "password")).thenReturn(testFoundUserOptional);
 
             Assertions.assertEquals(testFoundUser, userService.findByCredentials("test@test.com", "password").get());
@@ -149,36 +149,33 @@ public class UserServiceTest {
             when(userService.findByCredentials(1)).thenReturn(testFoundUserOptional);
 
             Assertions.assertTrue(testFoundUserOptional.isPresent());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     // because of Optional<T>, test if Optional<> does not contain a value if user is not found (empty)
     @Test
-    public void findByCredentials_withId_optionalContainsNoValue_ifUserNotFound(){
-        try{
+    public void findByCredentials_withId_optionalContainsNoValue_ifUserNotFound() {
+        try {
             // this is not used due to how assertTrue() method works
             // but assume this was the case that was executed
             when(userService.findByCredentials(100)).thenReturn(testNotFoundUserOptional);
 
             Assertions.assertTrue(testNotFoundUserOptional.isEmpty());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     // because of Optional<T>, test if Optional<User> values are as expected if user is found
     @Test
-    public void findByCredentials_withId_foundUser_OptionalEqualsOptional(){
-        try{
+    public void findByCredentials_withId_foundUser_OptionalEqualsOptional() {
+        try {
             when(userService.findByCredentials(1)).thenReturn(testFoundUserOptional);
 
             Assertions.assertEquals(testFoundUserOptional, userService.findByCredentials(1));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -186,26 +183,24 @@ public class UserServiceTest {
     // because of Optional<T>, test if Optional<User> values are as expected if user is found
     // No clue if the test above checks the User's properties values from being Optional<> wrapped, so testing that here
     @Test
-    public void findByCredentials_withId_foundUser_OptionalEqualsUser(){
-        try{
+    public void findByCredentials_withId_foundUser_OptionalEqualsUser() {
+        try {
             when(userService.findByCredentials(1)).thenReturn(testFoundUserOptional);
 
             Assertions.assertEquals(testFoundUser, userService.findByCredentials(1).get());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     // because of Optional<T>, test if Optional<User> values are as expected if user is not found
     @Test
-    public void findByCredentials_withId_notFoundUser_OptionalEqualsOptional(){
-        try{
+    public void findByCredentials_withId_notFoundUser_OptionalEqualsOptional() {
+        try {
             when(userService.findByCredentials(100)).thenReturn(testNotFoundUserOptional);
 
             Assertions.assertEquals(testNotFoundUserOptional, userService.findByCredentials(100));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -213,13 +208,12 @@ public class UserServiceTest {
     // because of Optional<T>, test if Optional<User> values are as expected if user is not found
     // No clue if the test above checks the User's properties values from being Optional<> wrapped, so testing that here
     @Test
-    public void findByCredentials_withId_notFoundUser_OptionalIsEmpty(){
-        try{
+    public void findByCredentials_withId_notFoundUser_OptionalIsEmpty() {
+        try {
             when(userService.findByCredentials(1)).thenReturn(testNotFoundUserOptional);
 
             Assertions.assertTrue(userService.findByCredentials(1).isEmpty());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -230,13 +224,12 @@ public class UserServiceTest {
 
     // test when user updates info
     @Test
-    public void patchAccountData_userDataUpdated(){
-        try{
+    public void patchAccountData_userDataUpdated() {
+        try {
             when(userService.patchAccountData(testPatchUser)).thenReturn(testPatchUser);
 
             Assertions.assertEquals(testPatchUser, userService.patchAccountData(testPatchUser));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
@@ -337,11 +330,28 @@ public class UserServiceTest {
 
     //Test update password method
     @Test
-    public void updateUserPassword(){
-        try{
+    public void updateUserPassword() {
+        try {
+
             doNothing().when(userService).updatePassword(email, newPassword);
+            userService.updatePassword(email, newPassword);
+            when(userService.findByEmail(email)).thenReturn(testFoundUserOptional);
+            userRepository.save(testFoundUserOptional);
+
+            Assertions.assertEquals(userService.updatePassword(email, newPassword), updatedUser);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        catch (Exception e){
+    }
+
+    // find by email
+    @Test
+    public void findByEmail() {
+        try {
+            when(userService.findByEmail(email)).thenReturn(testFoundUserOptional);
+
+            Assertions.assertEquals(testFoundUserOptional, userService.findByEmail(email));
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
