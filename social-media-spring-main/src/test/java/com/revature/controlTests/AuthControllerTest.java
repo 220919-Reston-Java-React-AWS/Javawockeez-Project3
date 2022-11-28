@@ -3,6 +3,8 @@ package com.revature.controlTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.revature.controllers.AuthController;
+import com.revature.dtos.QuestionsRequest;
+import com.revature.dtos.UpdateQuestions;
 import com.revature.models.Profile;
 import com.revature.models.SampleQuestions1;
 import com.revature.models.SampleQuestions2;
@@ -27,6 +29,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -91,13 +94,19 @@ public class AuthControllerTest {
     SecurityQuestion updateQuestion1;
     SecurityQuestion updateQuestion2;
     SecurityQuestion updateQuestion3;
-    Optional<SecurityQuestion> optionalQuestion;
+    Optional<SecurityQuestion> optionalQuestion1;
+    Optional<SecurityQuestion> optionalQuestion2;
+    Optional<SecurityQuestion> optionalQuestion3;
     Optional<SecurityQuestion> optionalQuestionNotFound;
     List<SecurityQuestion> user1Questions;
     List<SecurityQuestion> updatedList;
     User user1;
     User newPasswordUser;
     Optional<User> optionalUser;
+    QuestionsRequest questionsRequest;
+    QuestionsRequest questionsRequestBadAnswer;
+    QuestionsRequest questionsRequestBadEmail;
+    Optional<User> emptyUser;
 
     // Static Counter for all tests
     static int counter = 0;
@@ -114,6 +123,7 @@ public class AuthControllerTest {
         // set users
         this.user1 = new User(1, "testy@gmail.com", "password", "testy", "testers");
         this.optionalUser = Optional.of(user1);
+        this.emptyUser = Optional.empty();
         this.newPasswordUser = new User(1, "testy@gmail.com", "password1", "testy", "testers");
 
         // set questions
@@ -123,7 +133,9 @@ public class AuthControllerTest {
         this.updateQuestion1 = new SecurityQuestion(7, "update1", "answer", user1);
         this.updateQuestion2 = new SecurityQuestion(8, "update2", "answer", user1);
         this.updateQuestion3 = new SecurityQuestion(9, "update3", "answer", user1);
-        this.optionalQuestion = Optional.of(testQuestion1);
+        this.optionalQuestion1 = Optional.of(testQuestion1);
+        this.optionalQuestion2 = Optional.of(testQuestion2);
+        this.optionalQuestion3 = Optional.of(testQuestion3);
         this.sample1Question1 = new SampleQuestions1(1, "test question");
         this.sample1Question2 = new SampleQuestions1(2, "test question 2");
         this.sample2Question1 = new SampleQuestions2(1, "test question");
@@ -143,20 +155,10 @@ public class AuthControllerTest {
         this.optionalUser = Optional.of(user1);
         this.newPasswordUser = new User(1, "testy@gmail.com", "password1", "testy", "testers");
 
-        // set questions
-        this.testQuestion1 = new SecurityQuestion(1, "test question1", "answer", user1);
-        this.testQuestion2 = new SecurityQuestion(2, "test question2", "answer", user1);
-        this.testQuestion3 = new SecurityQuestion(3, "test question3", "answer", user1);
-        this.updateQuestion1 = new SecurityQuestion(7, "update1", "answer", user1);
-        this.updateQuestion2 = new SecurityQuestion(8, "update2", "answer", user1);
-        this.updateQuestion3 = new SecurityQuestion(9, "update3", "answer", user1);
-        this.optionalQuestion = Optional.of(testQuestion1);
-        this.sample1Question1 = new SampleQuestions1(1, "test question");
-        this.sample1Question2 = new SampleQuestions1(2, "test question 2");
-        this.sample2Question1 = new SampleQuestions2(1, "test question");
-        this.sample2Question2 = new SampleQuestions2(2, "test question 2");
-        this.sample3Question1= new SampleQuestions3(1, "test question");
-        this.sample3Question2 = new SampleQuestions3(2, "test question 2");
+        // set dtos
+        this.questionsRequest = new QuestionsRequest("testy@gmail.com","test question1", "answer", "test question2", "answer", "test question3", "answer", "password1");
+        this.questionsRequestBadAnswer = new QuestionsRequest("testy@gmail.com","test question1", "", "test question2", "answer", "test question3", "answer", "password1");
+        this.questionsRequestBadEmail = new QuestionsRequest("bad@gmail.com","test question1", "answer", "test question2", "answer", "test question3", "answer", "password1");
 
         // set lists
         this.user1Questions = Arrays.asList(testQuestion1, testQuestion2, testQuestion3);
@@ -313,5 +315,69 @@ public class AuthControllerTest {
                  .andExpect(status().isOk())
                  .andExpect(content().json(expectedResults));
      }
+
+    // update password with security questions
+    @Test
+    public void forgotPasswordValid() throws Exception{
+        // create string to be returned by json
+        String inputJSON = objectMapper.writeValueAsString(questionsRequest);
+
+
+        //test methods
+        when(userService.findByEmail("testy@gmail.com")).thenReturn(optionalUser);
+        when(securityQuestionService.findByQuestion("test question1", "answer")).thenReturn(optionalQuestion1);
+        when(securityQuestionService.findByQuestion("test question2", "answer")).thenReturn(optionalQuestion2);
+        when(securityQuestionService.findByQuestion("test question3", "answer")).thenReturn(optionalQuestion3);
+        when(userService.updatePassword("testy@gmail.com", "password1")).thenReturn(newPasswordUser);
+
+
+        //execute test
+        mvc.perform(post(baseUrl + "/forgot-password").contentType(MediaType.APPLICATION_JSON).content(inputJSON).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect( status().isOk() )
+                .andExpect( content().string( "Password successfully updated" ) );
+    }
+
+    // update password with invalid email
+    @Test
+    public void forgotPasswordInvalidUser() throws Exception{
+        // create string to be returned by json
+        String inputJSON = objectMapper.writeValueAsString(questionsRequestBadEmail);
+
+
+        //test methods
+        when(userService.findByEmail("bad@gmail.com")).thenReturn(emptyUser);
+        when(securityQuestionService.findByQuestion("test question1", "answer")).thenReturn(optionalQuestion1);
+        when(securityQuestionService.findByQuestion("test question2", "answer")).thenReturn(optionalQuestion2);
+        when(securityQuestionService.findByQuestion("test question3", "answer")).thenReturn(optionalQuestion3);
+        when(userService.updatePassword("bad@gmail.com", "password1")).thenReturn(newPasswordUser);
+
+
+        //execute test
+        mvc.perform(post(baseUrl + "/forgot-password").contentType(MediaType.APPLICATION_JSON).content(inputJSON).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect( status().isBadRequest() );
+    }
+
+    // update password with security questions
+    @Test
+    public void forgotPasswordInvalidAnswer() throws Exception{
+        // create string to be returned by json
+        String inputJSON = objectMapper.writeValueAsString(questionsRequestBadAnswer);
+
+
+        //test methods
+        when(userService.findByEmail("testy@gmail.com")).thenReturn(emptyUser);
+        when(securityQuestionService.findByQuestion("test question1", "answer")).thenReturn(optionalQuestion1);
+        when(securityQuestionService.findByQuestion("test question2", "")).thenReturn(optionalQuestion2);
+        when(securityQuestionService.findByQuestion("test question3", "answer")).thenReturn(optionalQuestion3);
+        when(userService.updatePassword("testy@gmail.com", "password1")).thenReturn(newPasswordUser);
+
+
+        //execute test
+        mvc.perform(post(baseUrl + "/forgot-password").contentType(MediaType.APPLICATION_JSON).content(inputJSON).accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect( status().isBadRequest() );
+    }
 
 }

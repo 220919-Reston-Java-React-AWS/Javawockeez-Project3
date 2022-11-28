@@ -4,15 +4,18 @@ import com.revature.exceptions.InvalidInputException;
 import com.revature.models.User;
 import com.revature.repositories.UserRepository;
 import com.revature.services.UserService;
-import org.junit.jupiter.api.*;
+import org.hibernate.QueryException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class UserServiceTest {
@@ -32,6 +35,7 @@ public class UserServiceTest {
     //Password Strings
     String email;
     String newPassword;
+    String badEmail;
 
     @BeforeEach
     void initTestValues(){
@@ -51,6 +55,7 @@ public class UserServiceTest {
         //new password
         this.email = new String("testuser@test.com");
         this.newPassword = new String("password");
+        this.badEmail = new String("notmyemail.com");
     }
 
     /*------Optional<User> findByCredentials(String email, String password) Tests------*/
@@ -332,18 +337,36 @@ public class UserServiceTest {
     @Test
     public void updateUserPassword() {
         try {
-
-            doNothing().when(userService).updatePassword(email, newPassword);
-            userService.updatePassword(email, newPassword);
             when(userService.findByEmail(email)).thenReturn(testFoundUserOptional);
-            userRepository.save(testFoundUserOptional);
+            userService.updatePassword(email, newPassword);
+            Assertions.assertEquals(userService.updatePassword(email, newPassword), testFoundUser);
 
-            Assertions.assertEquals(userService.updatePassword(email, newPassword), updatedUser);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
+    //Test update password without valid user
+    @Test
+    public void updateUserPasswordInvalidUser() {
+        try {
+            when(userService.findByEmail(badEmail)).thenReturn(testNotFoundUserOptional);
+            Assertions.assertThrows(QueryException.class, ()->userService.updatePassword(badEmail, newPassword));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    //Test update password without valid user
+    @Test
+    public void updateUserPasswordInvalidPassword() {
+        try {
+            when(userService.findByEmail(email)).thenReturn(testFoundUserOptional);
+            Assertions.assertThrows(InvalidInputException.class, ()->userService.updatePassword(email, ""));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
     // find by email
     @Test
     public void findByEmail() {
