@@ -152,10 +152,10 @@ public class AuthController {
         return ResponseEntity.ok(this.securityQuestionService.findByCredentials(user));
     }
 
-    @DeleteMapping("/delete-questions/{id}")
-    public ResponseEntity replaceQuestions(@PathVariable int id){
+    @DeleteMapping("/delete-questions/{email}")
+    public ResponseEntity replaceQuestions(@PathVariable String email){
         User user = new User();
-        user.setId(id);
+        user.setEmail(email);
         this.securityQuestionService.remove(user);
         return ResponseEntity.ok("Replaced questions successfully.");
     }
