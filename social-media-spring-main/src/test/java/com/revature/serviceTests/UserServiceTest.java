@@ -1,5 +1,6 @@
 package com.revature.serviceTests;
 
+import com.revature.exceptions.InvalidInputException;
 import com.revature.models.User;
 import com.revature.repositories.UserRepository;
 import com.revature.services.UserService;
@@ -7,6 +8,8 @@ import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -238,6 +241,97 @@ public class UserServiceTest {
         }
     }
 
+    /*------User save(User update) Tests------*/
+    @Test
+    public void save_INPUT_user_EXPECT_user() throws InvalidInputException {
+        String email = testFoundUser.getEmail();
+
+        when(userService.findByEmail(email)).thenReturn( Optional.ofNullable(null));
+        when(userRepository.save(testFoundUser)).thenReturn(testFoundUser);
+
+        Assertions.assertEquals(testFoundUser, userService.save(testFoundUser));
+    }
+
+    @Test
+    public void save_INPUT_invalidUserWithUsedEmail_EXPECT_exceptionThrown() {
+        String email = testFoundUser.getEmail();
+
+        when(userService.findByEmail(email)).thenReturn( testFoundUserOptional );
+        when(userRepository.save(testFoundUser)).thenReturn(testFoundUser);
+
+        try{
+            Assertions.assertThrows(InvalidInputException.class, ()->userService.save(testFoundUser));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+    @Test
+    public void save_INPUT_invalidUserWithLongEmail_EXPECT_exceptionThrown() {
+        String email = "t".repeat(300);
+
+        User testUser = new User(testFoundUser.getId(), email, testFoundUser.getPassword(), testFoundUser.getFirstName(), testFoundUser.getLastName());
+
+        when(userService.findByEmail(email)).thenReturn( Optional.ofNullable(null));
+        when(userRepository.save(testFoundUser)).thenReturn(testFoundUser);
+
+        try{
+            Assertions.assertThrows(InvalidInputException.class, ()->userService.save(testUser));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+    @Test
+    public void save_INPUT_invalidUserWithBadPassword_EXPECT_exceptionThrown() {
+        String password = "pwd";
+
+        User testUser = new User(testFoundUser.getId(), testFoundUser.getEmail(), password, testFoundUser.getFirstName(), testFoundUser.getLastName());
+
+        when(userService.findByEmail(email)).thenReturn( testFoundUserOptional );
+        when(userRepository.save(testFoundUser)).thenReturn(testFoundUser);
+
+        try{
+            Assertions.assertThrows(InvalidInputException.class, ()->userService.save(testUser));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+    @Test
+    public void save_INPUT_invalidUserWithBadFirstName_EXPECT_exceptionThrown() {
+        String first = "12";
+
+        User testUser = new User(testFoundUser.getId(), testFoundUser.getEmail(), testFoundUser.getPassword(), first, testFoundUser.getLastName());
+
+        when(userService.findByEmail(email)).thenReturn( testFoundUserOptional );
+        when(userRepository.save(testFoundUser)).thenReturn(testFoundUser);
+
+        try{
+            Assertions.assertThrows(InvalidInputException.class, ()->userService.save(testUser));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void save_INPUT_invalidUserWithBadLastName_EXPECT_exceptionThrown() {
+        String last = "42";
+
+        User testUser = new User(testFoundUser.getId(), testFoundUser.getEmail(), testFoundUser.getPassword(), testFoundUser.getFirstName(), last);
+
+        when(userService.findByEmail(email)).thenReturn( testFoundUserOptional );
+        when(userRepository.save(testFoundUser)).thenReturn(testFoundUser);
+
+        try{
+            Assertions.assertThrows(InvalidInputException.class, ()->userService.save(testUser));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
 
     /*------Other Tests Below Here------*/
 
@@ -250,6 +344,111 @@ public class UserServiceTest {
         catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+
+    /*---------------------         Validators         ---------------------*/
+
+    // validPassword -- 6 < len < 20
+    @Test
+    public void validPassword_INPUT_length0_EXPECT_False() {
+        Assertions.assertFalse(userService.validPassword(""));
+    }
+
+    @Test
+    public void validPassword_INPUT_length5_EXPECT_False() {
+        Assertions.assertFalse(userService.validPassword("abcde"));
+    }
+
+    @Test
+    public void validPassword_INPUT_length6_EXPECT_True() {
+        Assertions.assertTrue(userService.validPassword("abcdef"));
+    }
+
+    @Test
+    public void validPassword_INPUT_length20_EXPECT_True() {
+        Assertions.assertTrue(userService.validPassword("abcdefghij012345678."));
+    }
+
+    @Test
+    public void validPassword_INPUT_length21_EXPECT_False() {
+        Assertions.assertFalse(userService.validPassword("abcdefghij012345678.,"));
+    }
+
+    // validFirstname -- 1 <= len <= 30, all letters
+    @Test
+    public void validFirstname_INPUT_length1_EXPECT_True(){
+        Assertions.assertTrue( userService.validFirstname("X") );
+    }
+
+    @Test
+    public void validFirstname_INPUT_length30_EXPECT_True(){
+        Assertions.assertTrue( userService.validFirstname("Wolfeschlegelsteinhausenberger") ); // Unfortunately, his real name, Wolfeschlegelsteinhausenbergerdorff, was too long
+    }
+
+    @Test
+    public void validFirstname_INPUT_length31_EXPECT_False(){
+        Assertions.assertFalse( userService.validFirstname("Wolfeschlegelsteinhausenbergerz") );
+    }
+
+    @Test
+    public void validFirstname_INPUT_specialCharSPACEandDASHandPERIOD_EXPECT_True(){
+        Assertions.assertTrue( userService.validFirstname("Tran-Cruz Sr.") );
+    }
+
+    @Test
+    public void validFirstname_INPUT_specialChar1_EXPECT_False(){
+        Assertions.assertFalse( userService.validFirstname("X AE A-12") );
+    }
+
+    // validLastname-- 1 <= len <= 30, all letters
+    @Test
+    public void validLastname_INPUT_length1_EXPECT_True(){
+        Assertions.assertTrue( userService.validLastname("X") );
+    }
+
+    @Test
+    public void validLastname_INPUT_length30_EXPECT_True(){
+        Assertions.assertTrue( userService.validLastname("Wolfeschlegelsteinhausenberger") );
+    }
+
+    @Test
+    public void validLastname_INPUT_length31_EXPECT_False(){
+        Assertions.assertFalse( userService.validLastname("Wolfeschlegelsteinhausenbergerz") );
+    }
+
+    @Test
+    public void validLastname_INPUT_specialCharSPACEandDASH_EXPECT_True(){
+        Assertions.assertTrue( userService.validLastname("Tran-De la Cruz Sr.") );
+    }
+
+    @Test
+    public void validLastname_INPUT_specialChar1_EXPECT_False(){
+        Assertions.assertFalse( userService.validLastname("X AE A-12") );
+    }
+
+
+    // Valid Last name
+    @Test
+    public void validEmail_INPUT_usedEmail_EXPECT_InvalidInputException(){
+        String email = testFoundUser.getEmail();
+
+        when(userService.findByEmail(email)).thenReturn( testFoundUserOptional );
+
+        try {
+            Assertions.assertThrows(InvalidInputException.class, ()->{userService.validEmail(email);} );
+        } catch (Exception e) {
+            System.out.println( e.getMessage() );
+        }
+    }
+
+    @Test
+    public void validEmail_INPUT_newEmail_EXPECT_True() throws InvalidInputException {
+        String email = testFoundUser.getEmail();
+
+        when(userService.findByEmail(email)).thenReturn( Optional.ofNullable(null) );
+
+        Assertions.assertTrue(userService.validEmail(email));
     }
 
 }
