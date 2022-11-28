@@ -8,11 +8,8 @@ import com.revature.models.SampleQuestions1;
 import com.revature.models.SampleQuestions2;
 import com.revature.models.SampleQuestions3;
 import com.revature.models.SecurityQuestion;
-<<<<<<< HEAD
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.RegisterRequest;
-=======
->>>>>>> 1e93330fb795e5fe59a4a3385e1cbd0b05320dcf
 import com.revature.models.User;
 import com.revature.services.*;
 
@@ -133,8 +130,6 @@ public class AuthControllerTest {
         this.sample2Question2 = new SampleQuestions2(2, "test question 2");
         this.sample3Question1= new SampleQuestions3(1, "test question");
         this.sample3Question2 = new SampleQuestions3(2, "test question 2");
-<<<<<<< HEAD
-
 
         // set lists
         this.user1Questions = Arrays.asList(testQuestion1, testQuestion2, testQuestion3);
@@ -162,10 +157,6 @@ public class AuthControllerTest {
         this.sample2Question2 = new SampleQuestions2(2, "test question 2");
         this.sample3Question1= new SampleQuestions3(1, "test question");
         this.sample3Question2 = new SampleQuestions3(2, "test question 2");
-
-=======
-        
->>>>>>> 1e93330fb795e5fe59a4a3385e1cbd0b05320dcf
 
         // set lists
         this.user1Questions = Arrays.asList(testQuestion1, testQuestion2, testQuestion3);
@@ -203,7 +194,6 @@ public class AuthControllerTest {
                 .andExpect( status().isOk() );
     }
 
-<<<<<<< HEAD
     @Test
     public void login_INPUT_validCredentials_EXPECT_correctUser() throws Exception {
         LoginRequest login = new LoginRequest(testUser.getEmail(), testUser.getPassword());
@@ -236,10 +226,7 @@ public class AuthControllerTest {
 
     @Test
     public void register_INPUT_validRegistration_EXPECT_newUser() throws Exception {
-        SecurityQuestion q1 = new SecurityQuestion(1, "What is 2+2", "4", testUser);
-        SecurityQuestion q2 = new SecurityQuestion(1, "What is 1+2", "3", testUser);
-        SecurityQuestion q3 = new SecurityQuestion(1, "What is the answer", "42", testUser);
-        RegisterRequest newUser = new RegisterRequest(testUser.getEmail(), testUser.getPassword(), testUser.getFirstName(), testUser.getLastName(), q1.getQuestion(), q1.getAnswer(), q2.getQuestion(), q2.getAnswer(), q3.getQuestion(), q3.getAnswer());
+        RegisterRequest newUser = new RegisterRequest(testUser.getEmail(), testUser.getPassword(), testUser.getFirstName(), testUser.getLastName(), testQuestion1.getQuestion(), testQuestion1.getAnswer(), testQuestion2.getQuestion(), testQuestion2.getAnswer(), testQuestion3.getQuestion(), testQuestion3.getAnswer());
 
         Profile registerProfile = new Profile();
         registerProfile.setId(0);
@@ -250,17 +237,15 @@ public class AuthControllerTest {
 
         when(authService.register(testUser)).thenReturn(testUser);
         when(profileService.registerProfile(registerProfile)).thenReturn(registerProfile);
-        when(securityQuestionService.addSecurityQuestion(q1)).thenReturn(q1);
-        when(securityQuestionService.addSecurityQuestion(q2)).thenReturn(q2);
-        when(securityQuestionService.addSecurityQuestion(q3)).thenReturn(q3);
+        when(securityQuestionService.addSecurityQuestion(testQuestion1)).thenReturn(testQuestion1);
+        when(securityQuestionService.addSecurityQuestion(testQuestion2)).thenReturn(testQuestion2);
+        when(securityQuestionService.addSecurityQuestion(testQuestion3)).thenReturn(testQuestion3);
 
         mvc.perform(post(baseUrl + "/register").contentType(MediaType.APPLICATION_JSON).content(inputJSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect( status().isCreated() );
 
     }
 
-=======
->>>>>>> 1e93330fb795e5fe59a4a3385e1cbd0b05320dcf
     // Tests for sample questions
 
     // get sample questions 1
@@ -322,11 +307,7 @@ public class AuthControllerTest {
          // use methods to test
          when(userService.findByEmail("testy@gmail.com")).thenReturn(optionalUser);
          when(securityQuestionService.findByCredentials(optionalUser)).thenReturn(user1Questions);
-<<<<<<< HEAD
 
-=======
-         
->>>>>>> 1e93330fb795e5fe59a4a3385e1cbd0b05320dcf
          // execute the test
          mvc.perform(get(baseUrl + "/security-questions/testy@gmail.com").contentType(MediaType.APPLICATION_JSON))
                  .andExpect(status().isOk())
