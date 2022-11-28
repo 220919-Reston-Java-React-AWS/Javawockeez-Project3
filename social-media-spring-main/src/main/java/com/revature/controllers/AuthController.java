@@ -96,10 +96,10 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    @GetMapping("/hello")
-    public String hello(){
-        return "Hello World!";
-    }
+//    @GetMapping("/hello")
+//    public String hello(){
+//        return "Hello World!";
+//    }
 
     //Beginning of password changing section
     @PostMapping("/forgot-password")
