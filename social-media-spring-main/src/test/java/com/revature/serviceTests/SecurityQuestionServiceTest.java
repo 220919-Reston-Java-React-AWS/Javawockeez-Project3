@@ -1,5 +1,6 @@
 package com.revature.serviceTests;
 
+import com.revature.exceptions.InvalidInputException;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -36,6 +37,7 @@ public class SecurityQuestionServiceTest {
     SecurityQuestion testQuestion5;
     SecurityQuestion testQuestion6;
     SecurityQuestion addQuestion;
+    SecurityQuestion badQuestion;
     SecurityQuestion updateQuestion1;
     SecurityQuestion updateQuestion2;
     SecurityQuestion updateQuestion3;
@@ -50,6 +52,8 @@ public class SecurityQuestionServiceTest {
     Optional<User> optionalUser;
     String question;
     String answer;
+    String newPassword;
+    Optional<User> updatedUser;
 
     @BeforeEach
     void initTestValues(){
@@ -62,6 +66,7 @@ public class SecurityQuestionServiceTest {
         // set strings
         this.question = new String("optional");
         this.answer = new String("question");
+        this.newPassword = new String("password2");
 
         // set questions
         this.testQuestion1 = new SecurityQuestion(1, "test question1", "answer", user1);
@@ -71,6 +76,7 @@ public class SecurityQuestionServiceTest {
         this.testQuestion5 = new SecurityQuestion(5, "test question2", "answer2", user2);
         this.testQuestion6 = new SecurityQuestion(6, "test question3", "answer3", user2);
         this.addQuestion = new SecurityQuestion(10, "test question 10", "answer", user2);
+        this.badQuestion = new SecurityQuestion(10, "test question", "", user1);
         this.updateQuestion1 = new SecurityQuestion(7, "update1", "answer", user1);
         this.updateQuestion2 = new SecurityQuestion(8, "update2", "answer", user1);
         this.updateQuestion3 = new SecurityQuestion(9, "update3", "answer", user1);
@@ -125,6 +131,19 @@ public class SecurityQuestionServiceTest {
         }
     }
 
+    //invalid security question
+    @Test
+    public void SecurityQuestionInvalid(){
+        try{
+            when(securityQuestionService.addSecurityQuestion(badQuestion)).thenReturn(badQuestion);
+
+            Assertions.assertThrows(InvalidInputException.class , () -> securityQuestionService.addSecurityQuestion(badQuestion));
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     //find questions by credentials
     @Test
     public void SecurityQuestionsByCredentials(){
@@ -142,7 +161,7 @@ public class SecurityQuestionServiceTest {
     @Test
     public void DeleteSecurityQuestionsByUser(){
         try{
-            doNothing().when(securityQuestionService).remove(user1);
+            doNothing().when(securityQuestionRepository).deleteByUser(user1);
 
             securityQuestionService.remove(user1);
 
