@@ -143,6 +143,10 @@ public class SecurityQuestionServiceTest {
     public void DeleteSecurityQuestionsByUser(){
         try{
             doNothing().when(securityQuestionService).remove(user1);
+
+            securityQuestionService.remove(user1);
+
+            verify(securityQuestionRepository, times(1)).deleteByUser(user1);
         }
         catch (Exception e){
             System.out.println(e.getMessage());

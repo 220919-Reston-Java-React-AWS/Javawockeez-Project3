@@ -126,32 +126,28 @@ public class AuthController {
      
     }
 
+    //get first set of questions
     @GetMapping("/questions1")
     public ResponseEntity<List<SampleQuestions1>> getQuestions(){
         return ResponseEntity.ok(this.sampleQuestions1Service.listQuestions());
     }
 
+    //get second set of questions
     @GetMapping("/questions2")
     public ResponseEntity<List<SampleQuestions2>> getQuestions2(){
         return ResponseEntity.ok(this.sampleQuestions2Service.listQuestions());
     }
 
+    //get third set
     @GetMapping("/questions3")
     public ResponseEntity<List<SampleQuestions3>> getQuestions3(){
         return ResponseEntity.ok(this.sampleQuestions3Service.listQuestions());
     }
 
+    //get questions to reset password
     @GetMapping("/security-questions/{email}")
     public ResponseEntity<List<SecurityQuestion>> userQuestions(@PathVariable String email){
         Optional<User> user = userService.findByEmail(email);
         return ResponseEntity.ok(this.securityQuestionService.findByCredentials(user));
-    }
-
-    @DeleteMapping("/delete-questions/{id}")
-    public ResponseEntity replaceQuestions(@PathVariable int id){
-        User user = new User();
-        user.setId(id);
-        this.securityQuestionService.remove(user);
-        return ResponseEntity.ok("Replaced questions successfully.");
     }
 }

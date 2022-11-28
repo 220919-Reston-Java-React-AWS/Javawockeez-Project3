@@ -92,9 +92,9 @@ public class ProfileController {
     }
 
     //gets questions to update questions in profile page
-    @GetMapping("/security-questions/{email}")
-    public ResponseEntity<List<SecurityQuestion>> userQuestions(@PathVariable String email){
-        Optional<User> user = userService.findByEmail(email);
+    @GetMapping("/security-questions/{id}")
+    public ResponseEntity<List<SecurityQuestion>> userQuestions(@PathVariable int id){
+        Optional<User> user = userService.findByCredentials(id);
         return ResponseEntity.ok(this.securityQuestionService.findByCredentials(user));
     }
 
@@ -133,12 +133,5 @@ public class ProfileController {
         securityQuestionService.addSecurityQuestion(secure3);
 
         return ResponseEntity.ok("Questions successfully updated");
-    }
-    
-    //update password
-    @PostMapping("/update-password/{email}")
-    public ResponseEntity updatePassword(@RequestBody UpdatePassword updatePassword, @PathVariable String email) throws InvalidInputException{
-        this.userService.updatePassword(email, updatePassword.getPassword());
-        return ResponseEntity.ok("Password updated successfully.");
     }
 }
