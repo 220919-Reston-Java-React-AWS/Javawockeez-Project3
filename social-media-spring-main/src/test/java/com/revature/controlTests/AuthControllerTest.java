@@ -3,15 +3,13 @@ package com.revature.controlTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.revature.controllers.AuthController;
-import com.revature.dtos.LoginRequest;
-import com.revature.dtos.RegisterRequest;
-import com.revature.exceptions.InvalidInputException;
 import com.revature.models.Profile;
-import com.revature.models.SecurityQuestion;
 import com.revature.models.SampleQuestions1;
 import com.revature.models.SampleQuestions2;
 import com.revature.models.SampleQuestions3;
 import com.revature.models.SecurityQuestion;
+import com.revature.dtos.LoginRequest;
+import com.revature.dtos.RegisterRequest;
 import com.revature.models.User;
 import com.revature.services.*;
 
@@ -112,6 +110,34 @@ public class AuthControllerTest {
         counter++; // In the before-each for curiosity's sake
 
         this.testUser = new User(1, "test@test.com", "password", "Testy", "McTestface");
+
+        // set users
+        this.user1 = new User(1, "testy@gmail.com", "password", "testy", "testers");
+        this.optionalUser = Optional.of(user1);
+        this.newPasswordUser = new User(1, "testy@gmail.com", "password1", "testy", "testers");
+
+        // set questions
+        this.testQuestion1 = new SecurityQuestion(1, "test question1", "answer", user1);
+        this.testQuestion2 = new SecurityQuestion(2, "test question2", "answer", user1);
+        this.testQuestion3 = new SecurityQuestion(3, "test question3", "answer", user1);
+        this.updateQuestion1 = new SecurityQuestion(7, "update1", "answer", user1);
+        this.updateQuestion2 = new SecurityQuestion(8, "update2", "answer", user1);
+        this.updateQuestion3 = new SecurityQuestion(9, "update3", "answer", user1);
+        this.optionalQuestion = Optional.of(testQuestion1);
+        this.sample1Question1 = new SampleQuestions1(1, "test question");
+        this.sample1Question2 = new SampleQuestions1(2, "test question 2");
+        this.sample2Question1 = new SampleQuestions2(1, "test question");
+        this.sample2Question2 = new SampleQuestions2(2, "test question 2");
+        this.sample3Question1= new SampleQuestions3(1, "test question");
+        this.sample3Question2 = new SampleQuestions3(2, "test question 2");
+
+
+        // set lists
+        this.user1Questions = Arrays.asList(testQuestion1, testQuestion2, testQuestion3);
+        this.updatedList = Arrays.asList(updateQuestion1, updateQuestion2, updateQuestion3);
+        this.sample3QuestionsList = Arrays.asList(sample3Question1, sample3Question2);
+        this.sampleQuestions1List = Arrays.asList(sample1Question1, sample1Question2);
+        this.sampleQuestions2List = Arrays.asList(sample2Question1, sample2Question2);
 
         // set users
         this.user1 = new User(1, "testy@gmail.com", "password", "testy", "testers");
