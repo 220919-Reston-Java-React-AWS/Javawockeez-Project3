@@ -64,19 +64,31 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void findByCredentials_INPUT_validCredentials_EXPECT_userOptional(){
+    public void findByCredentials_INPUT_validCredentials_EXPECT_user() throws InvalidInputException {
 
-        when(userService.findByCredentials(testUser.getEmail(), testUser.getPassword())).thenReturn( Optional.of( testUser ) );
+        when(userService.findByEmail(testUser.getEmail())).thenReturn( Optional.of( testUser ) );
 
-        Assertions.assertEquals(Optional.of( testUser ), as.findByCredentials(testUser.getEmail(), testUser.getPassword()));
+        Assertions.assertEquals( testUser , as.findByCredentials(testUser.getEmail(), testUser.getPassword()));
     }
 
     @Test
-    public void findByCredentials_INPUT_invalidCredentials_EXPECT_emptyOptional(){
+    public void findByCredentials_INPUT_invalidEmail_EXPECT_throwInvalidInputException() throws InvalidInputException {
 
-        when(userService.findByCredentials("est@test.com", testUser.getPassword())).thenReturn( Optional.empty( ) );
+        String fakeEmail = "est@test.com";
 
-        Assertions.assertEquals(Optional.empty( ), as.findByCredentials(testUser.getEmail(), testUser.getPassword()));
+        when(userService.findByEmail(fakeEmail)).thenReturn( Optional.empty( ) );
+
+        Assertions.assertThrows(InvalidInputException.class , () -> as.findByCredentials(fakeEmail, testUser.getPassword()));
+    }
+
+    @Test
+    public void findByCredentials_INPUT_invalidPassword_EXPECT_throwInvalidInputException() throws InvalidInputException {
+
+        String fakePassword = "pasword";
+
+        when(userService.findByEmail(testUser.getEmail())).thenReturn( Optional.of(testUser) );
+
+        Assertions.assertThrows(InvalidInputException.class , () -> as.findByCredentials(testUser.getEmail(), fakePassword));
     }
 
 }

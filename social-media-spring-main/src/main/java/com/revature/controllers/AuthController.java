@@ -49,16 +49,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
-        Optional<User> optional = authService.findByCredentials(loginRequest.getEmail(), loginRequest.getPassword());
+    public ResponseEntity<User> login(@RequestBody LoginRequest loginRequest, HttpSession session) throws InvalidInputException {
+        User newUser = authService.findByCredentials(loginRequest.getEmail(), loginRequest.getPassword());
 
-        if(!optional.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
+        session.setAttribute("user", newUser);
 
-        session.setAttribute("user", optional.get());
-
-        return ResponseEntity.ok(optional.get());
+        return ResponseEntity.ok(newUser);
     }
 
     @PostMapping("/logout")
@@ -148,7 +144,6 @@ public class AuthController {
     @GetMapping("/security-questions/{email}")
     public ResponseEntity<List<SecurityQuestion>> userQuestions(@PathVariable String email){
         Optional<User> user = userService.findByEmail(email);
-        System.out.println(user);
         return ResponseEntity.ok(this.securityQuestionService.findByCredentials(user));
     }
 
