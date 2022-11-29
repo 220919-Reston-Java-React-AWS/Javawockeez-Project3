@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.controllers.AuthController;
 import com.revature.dtos.QuestionsRequest;
 import com.revature.dtos.UpdateQuestions;
+import com.revature.exceptions.InvalidInputException;
 import com.revature.models.Profile;
 import com.revature.models.SampleQuestions1;
 import com.revature.models.SampleQuestions2;
