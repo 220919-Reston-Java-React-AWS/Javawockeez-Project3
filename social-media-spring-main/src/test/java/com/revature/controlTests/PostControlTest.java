@@ -1,6 +1,7 @@
 package com.revature.controlTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.advice.ExceptionLogger;
 import com.revature.controllers.PostController;
 import com.revature.models.Post;
 import com.revature.models.User;
@@ -69,7 +70,7 @@ public class PostControlTest {
     @BeforeEach
     void initTests(){
 
-        mvc = MockMvcBuilders.standaloneSetup(this.pc).build();
+        mvc = MockMvcBuilders.standaloneSetup(this.pc).setControllerAdvice(new ExceptionLogger()).build();
 
         counter++; // In the before-each for curiosity's sake
 
