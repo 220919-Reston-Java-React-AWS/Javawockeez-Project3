@@ -1,9 +1,5 @@
 package com.revature.controllers;
 
-import com.revature.dtos.LoginRequest;
-import com.revature.dtos.RegisterRequest;
-import com.revature.dtos.Response;
-import com.revature.dtos.UpdatePassword;
 import com.revature.dtos.UpdateQuestions;
 import com.revature.exceptions.InvalidInputException;
 import com.revature.models.Post;

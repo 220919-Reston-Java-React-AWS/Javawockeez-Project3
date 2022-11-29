@@ -33,6 +33,8 @@ public class ExceptionLoggerTest {
         System.setErr(originalErr);
     }
 
+    // Meant to test the stack-trace printing, but the testing stack always superseded it.
+    // Ironically, I can only really test it if I'm not actually testing it.
     void throwAfterNRecursions(Exception e, int n) throws Exception {
         if (n < 1){
             throw e;
@@ -89,12 +91,6 @@ public class ExceptionLoggerTest {
             Assertions.assertEquals(testMessage, e.getMessage());
             Assertions.assertEquals(expectedSubstring, outContent.toString().substring(0, expectedSubstring.length()));
 
-//            System.setOut(originalOut);
-//            System.out.println(outContent.toString());
-//            System.out.println(errContent.toString());
-//            for (StackTraceElement stack : e.getStackTrace() ){
-//                System.out.println(stack.toString());
-//            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.revature.advice;
 
 import com.revature.exceptions.InvalidInputException;
 import com.revature.exceptions.NotLoggedInException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +11,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.util.WebUtils;
 
+// This catches all errors, expected and otherwise, and prints/sends the cause.
+// Most of the class is devoted to custom-error messages for testing purposes.
+// handleExceptions handles the responses for errors in the back-end.
 @ControllerAdvice
 public class ExceptionLogger {
 
     // Ansi values to color the text/background of the terminal output
-    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RESET = "\u001B[0m"; // So the following is standard output.
 
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -95,11 +99,13 @@ public class ExceptionLogger {
         HttpStatus status;
 
         // Individualized handling
+        // "Expected errors" are printed in green, i.e. when someone isn't logged in or the input is faulty
+        // "Unexpected errors" are printed in red with a black background, i.e. our code not working.
         if (e instanceof InvalidInputException){
             status = HttpStatus.BAD_REQUEST;
             this.log(e, "green");
 
-        } else if (e instanceof NotLoggedInException){
+        } else if (e instanceof NotLoggedInException){ // This one is returned here (just text in response)
             status = HttpStatus.UNAUTHORIZED;
             this.log(e, "green");
             String errorMessage = "You must be logged in to perform this action";
@@ -114,20 +120,10 @@ public class ExceptionLogger {
 
         }
 
-        // Create and return the response to send to the front-end
+        // Create and return the response containing the exception and status (headers are empty).
         return new ResponseEntity<Exception>(e, headers, status);
 
-//        // Universal handling
-//        return handleExceptionInternal(e, headers, status, request);
     }
-
-//    protected ResponseEntity<Exception> handleExceptionInternal(Exception ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-//        if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
-//            request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);
-//        }
-//
-//        return new ResponseEntity<Exception>(ex, headers, status);
-//    }
 
     // ---------------------------------------------------------------------------------------------------------------//
 
