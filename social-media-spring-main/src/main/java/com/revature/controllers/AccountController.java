@@ -2,7 +2,6 @@ package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
 import com.revature.dtos.AccountUpdateRequest;
-import com.revature.exceptions.InvalidInputException;
 import com.revature.models.User;
 import com.revature.services.AccountService;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/account")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000", "http://s3demo110322.s3-website-us-west-2.amazonaws.com/"}, allowCredentials = "true")
 public class AccountController {
     private final AccountService accountService;
 

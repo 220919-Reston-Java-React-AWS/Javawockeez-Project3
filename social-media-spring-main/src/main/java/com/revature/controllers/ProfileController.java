@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/profile")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000", "http://s3demo110322.s3-website-us-west-2.amazonaws.com/"}, allowCredentials = "true")
 public class ProfileController {
     private final ProfileService profileService;
     private final UserService userService;
@@ -51,7 +51,6 @@ public class ProfileController {
 
         return ResponseEntity.ok(this.profileService.getAllByAuthor(author));
     }
-
 
     // get user information with id
     @GetMapping("/user/{id}")
@@ -110,7 +109,6 @@ public class ProfileController {
     }
 
     //update security questions
-
     @PostMapping("/update-questions/{id}")
     public ResponseEntity updateQuestions(@RequestBody UpdateQuestions updateQuestions, @PathVariable int id) throws InvalidInputException{
 
