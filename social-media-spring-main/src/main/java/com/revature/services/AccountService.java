@@ -1,11 +1,7 @@
 package com.revature.services;
 
-import com.revature.exceptions.InvalidInputException;
 import com.revature.models.User;
 import org.springframework.stereotype.Service;
-
-import java.net.URI;
-import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -15,6 +11,7 @@ public class AccountService {
         this.userService = userService;
     }
 
+    // Updates the user's account information
     public User patchAccountData(User user) {
         return userService.patchAccountData(user);
     }

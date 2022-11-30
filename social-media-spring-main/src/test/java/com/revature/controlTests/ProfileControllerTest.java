@@ -198,7 +198,6 @@ public class ProfileControllerTest {
 
         // execute the test
         mvc.perform(get(baseUrl + "/posts/1").contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResults));
     }
@@ -216,7 +215,6 @@ public class ProfileControllerTest {
 
         // execute the test
         mvc.perform(get(baseUrl + "/user/1").contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResults));
     }
@@ -238,7 +236,6 @@ public class ProfileControllerTest {
 
         // execute the test
         mvc.perform(get(baseUrl + "/page/1").contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResults));
     }
@@ -252,7 +249,6 @@ public class ProfileControllerTest {
 
         // execute the test
         mvc.perform(get(baseUrl + "/page/1").contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
@@ -269,7 +265,6 @@ public class ProfileControllerTest {
 
         // execute the test
         mvc.perform(patch(baseUrl + "/update-profile").contentType(MediaType.APPLICATION_JSON).content(inputJSON).accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
                 .andExpect(status().isOk());
     }
 

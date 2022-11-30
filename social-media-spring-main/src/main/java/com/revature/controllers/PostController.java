@@ -12,7 +12,7 @@ import com.revature.services.PostService;
 // The endpoint for all post/comment requests
 @RestController
 @RequestMapping("/post")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000", "http://s3demo110322.s3-website-us-west-2.amazonaws.com/"}, allowCredentials = "true")
 public class PostController {
 
     // The only service-layer class this uses

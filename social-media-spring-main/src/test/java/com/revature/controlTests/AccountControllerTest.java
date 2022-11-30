@@ -72,7 +72,6 @@ public class AccountControllerTest {
 
             // execute the test
             mvc.perform(patch(baseUrl + "/update-account").contentType(MediaType.APPLICATION_JSON).content(inputJSON).accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isAccepted())
                 .andExpect(content().json(expectedResults));
         }

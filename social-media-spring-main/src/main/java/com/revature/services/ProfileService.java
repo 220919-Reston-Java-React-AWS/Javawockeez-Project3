@@ -1,6 +1,5 @@
 package com.revature.services;
 
-import com.revature.exceptions.InvalidInputException;
 import com.revature.models.Post;
 import com.revature.models.Profile;
 import com.revature.models.User;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import java.net.URI;
 import java.util.Optional;
 
 @Service

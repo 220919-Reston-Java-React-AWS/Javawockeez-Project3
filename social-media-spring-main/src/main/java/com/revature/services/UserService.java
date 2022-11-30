@@ -7,7 +7,6 @@ import com.revature.repositories.UserRepository;
 import org.hibernate.QueryException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
