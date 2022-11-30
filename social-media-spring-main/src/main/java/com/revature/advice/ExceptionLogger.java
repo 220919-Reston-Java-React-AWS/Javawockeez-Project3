@@ -13,7 +13,22 @@ import org.springframework.web.util.WebUtils;
 
 // This catches all errors, expected and otherwise, and prints/sends the cause.
 // Most of the class is devoted to custom-error messages for testing purposes.
-// handleExceptions handles the responses for errors in the back-end.
+//
+// Currently, the exceptions we have defined (InvalidInputException and
+// NotLoggedInException) are printed in the console in green, and all other errors
+// are displayed in red with a black background. The stacktrace is also truncated to
+// include only the first few and last few stacks, as that is where most of the
+// information that concerns us is contained.
+//
+// Most of the content here is devoted to the custom display. ANSI strings are what
+// allow us to manipulate the colors in the console.
+//
+// handleExceptions handles the responses for errors in the back-end. This is where
+// any custom exception-handling can occur. Currently, all Exceptions except the
+// NotLoggedInException are passed directly to the front end as json. This should
+// perhaps be changed in the future so the front end can't the as much of the inner
+// workings of this end.
+
 @ControllerAdvice
 public class ExceptionLogger {
 

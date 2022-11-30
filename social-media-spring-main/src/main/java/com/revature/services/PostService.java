@@ -44,10 +44,14 @@ public class PostService {
 		return ignoreComments( this.postRepository.findAll() );
 	}
 
+	//     ---------------------------------------------------------------------------------------     //
+
 	// Add/modify a post (determined by ID)
 	public Post upsert(Post post) {
 		return this.postRepository.save(post);
 	}
+
+	//     ---------------------------------------------------------------------------------------     //
 
 	// Find the post which has this as a comment. Throws an exception if none are found (it's a main post)
 	// Required for the method remove() to work successfully (there has to be a better way, it's such a simple query)
@@ -81,6 +85,8 @@ public class PostService {
 		// Delete the post from the repository. Ideally, this would have been the only line.
 		this.postRepository.delete(post);
 	}
+
+	//     ---------------------------------------------------------------------------------------     //
 
 	// Remove anything that is a comment of another post.
 	private @NotNull List<Post> ignoreComments(@NotNull List<Post> allPosts){

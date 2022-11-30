@@ -94,7 +94,7 @@ Responsible for all information on social-media posts, along with comments (whic
 		- Returns all main posts, along with their comments.
 
 	PUT /post
-		- Requires body to contain JSON with the post being editted/uploaded. If the ID exists in the system, that post will be updated. If it does not, a new post will be created and the ID will be automatically generated and assigned.
+		- Requires body to contain JSON with the post being edited/uploaded. If the ID exists in the system, that post will be updated. If it does not, a new post will be created and the ID will be automatically generated and assigned.
 		- Returns JSON of the post, along with updated information (i.e. ID and post-date)
 
 	DELETE /post

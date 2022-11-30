@@ -39,7 +39,7 @@ public class AuthAspect {
     // if(authorized.value().equals(AuthRestriction.Manager) && !Role.Manager.equals(userRole)) {
     //     throw new InvalidRoleException("Must be logged in as a Manager to perform this action");
     // }
-    // Then the RestExceptionHandler class can be expanded to include
+    // Then the ExceptionLogger class can be expanded to include
     // @ExceptionHandler(InvalidRoleException.class)
     // which should return a 403 Forbidden such as:
     // String errorMessage = "Missing required role to perform this action";

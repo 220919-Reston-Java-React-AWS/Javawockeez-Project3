@@ -9,7 +9,34 @@ import com.revature.annotations.Authorized;
 import com.revature.models.Post;
 import com.revature.services.PostService;
 
-// The endpoint for all post/comment requests
+// The endpoint for all post/comment requests.
+// Responsible for all information on social-media posts, along with comments
+// (which are essentially just sub-posts).
+//
+// Endpoints:
+//	GET /post
+//		- Returns all main posts, along with their comments.
+//
+//	PUT /post
+//		- Requires body to contain JSON with the post being edited/uploaded.
+//		        If the ID exists in the system, that post will be updated. If
+//		        it does not, a new post will be created and the ID will be
+//		        automatically generated and assigned.
+//		- Returns JSON of the post, along with updated information
+//	        	(i.e. ID and post-date)
+//
+//	DELETE /post
+//		- Requires body to contain JSON with the post being deleted (particularly
+//	        	the ID and comments)
+//		- Returns a success message, even if the post was not found.
+//
+//	GET /post/all
+//		- Returns all posts and comments, along with any comments inside them.
+//
+// The person must have logged in (at /auth/login) in order to use any of
+// these functions.
+//
+
 @RestController
 @RequestMapping("/post")
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"}, allowCredentials = "true")
