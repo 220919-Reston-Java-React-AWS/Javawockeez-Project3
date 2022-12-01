@@ -112,8 +112,7 @@ public class ProfileController {
     @PostMapping("/update-questions/{id}")
     public ResponseEntity updateQuestions(@RequestBody UpdateQuestions updateQuestions, @PathVariable int id) throws InvalidInputException{
 
-        User user = new User();
-        user.setId(id);
+        User user = userService.findByCredentials(id).get();
 
         SecurityQuestion secure1 = new SecurityQuestion(0, updateQuestions.getQuestion1(), updateQuestions.getAnswer1(), user);
         SecurityQuestion secure2 = new SecurityQuestion(0, updateQuestions.getQuestion2(), updateQuestions.getAnswer2(), user);
