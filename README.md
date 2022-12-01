@@ -3,7 +3,9 @@
 Spring-Backend
 
 #### Endpoints
-The urls shown should be affixed to either [the local host](http://localhost:8080) or [the online host](http://220919javawockeezcapstonebackend-env.eba-gtdtyrfr.us-east-1.elasticbeanstalk.com), depending on whether you are running a ocal version of the back-end or not.
+The urls shown should be affixed to either [the local host](http://localhost:8080) or [the online host](http://220919javawockeezcapstonebackend-env.eba-gtdtyrfr.us-east-1.elasticbeanstalk.com), depending on whether you are running a local version of the back-end or not.
+
+Depending on your website's host URL (ex. http://localhost:8080 or on a website URL by a hosting service), add the website URL to the @CrossOrigin annotation in the controller files.
 
 
 ###### Account
@@ -103,3 +105,12 @@ Responsible for all information on social-media posts, along with comments (whic
 
 	GET /post/all
 		- Returns all posts and comments, along with any comments inside them.
+
+###### Setting Up the Database
+Located in the main/resources folder, there is the application.yml file required to configure connecting to a database. Based what you plan to do, there two options:
+
+- Application.yml file is configure for a PostgreSQL database. All you need to do is edit the datasource url, username, and password to point to your database.
+
+- If you plan on using a different type of SQL database, then edit the file to reflect the database platform and dialect driver and change the datasource properties to point to your database.
+
+**Note**: When initailizing your database for the first time, change the hibernate ddl-auto property to 'create' and change back to 'update.'
